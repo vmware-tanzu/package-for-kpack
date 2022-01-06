@@ -1,0 +1,57 @@
+#! Copyright 2021 VMware, Inc.
+#! SPDX-License-Identifier: Apache-2.0
+
+#@ load("@ytt:data", "data")
+---
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: #@ "kpack.community.tanzu.vmware.com." + data.values.version
+spec:
+  refName: kpack.community.tanzu.vmware.com
+  version: #@ data.values.version
+  capacityRequirementsDescription: Cluster with nodes > 50GB ephemeral storage, Registry > 5GB available space
+  releaseNotes: #@ "https://github.com/pivotal/kpack/releases/tag/v" + data.values.version
+  valuesSchema:
+    openAPIv3:
+      title: kpack.tanzu.vmware.com values schema
+      properties:
+        kp_default_repository:
+          type: string
+          description: docker repository
+          examples:
+            - registry.io/kpack
+        kp_default_repository_username:
+          type: string
+          description: registry username
+          examples:
+            - janedoe@vmware.com
+        kp_default_repository_password:
+          type: string
+          description: registry password
+          examples:
+            - password
+        http_proxy:
+          type: string
+          description: the HTTP proxy to use for network traffic
+        https_proxy:
+          type: string
+          description: the HTTPS proxy to use for network traffic.
+        no_proxy:
+          type: string
+          description: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy
+  template:
+    spec:
+      fetch:
+        - imgpkgBundle:
+            image: #@ data.values.bundle_image
+      template:
+        - ytt:
+            paths:
+              - "config/"
+        - kbld:
+            paths:
+              - "-"
+              - ".imgpkg/images.yml"
+      deploy:
+        - kapp: {}

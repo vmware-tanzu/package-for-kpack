@@ -1,0 +1,30 @@
+#! Copyright 2021 VMware, Inc.
+#! SPDX-License-Identifier: Apache-2.0
+
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"metadata":{"name":"kpack-controller"}, "kind": "Deployment"})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: controller
+          env:
+            #@ if data.values.http_proxy != "":
+            #@overlay/append
+            - name: HTTP_PROXY
+              value: #@ data.values.http_proxy
+            #@ end
+            #@ if data.values.https_proxy != "":
+            #@overlay/append
+            - name: HTTPS_PROXY
+              value: #@ data.values.https_proxy
+            #@ end
+            #@ if data.values.no_proxy != "":
+            #@overlay/append
+            - name: NO_PROXY
+              value: #@ data.values.no_proxy
+            #@ end

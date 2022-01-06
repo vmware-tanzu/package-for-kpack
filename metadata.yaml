@@ -1,0 +1,20 @@
+#! Copyright 2021 VMware, Inc.
+#! SPDX-License-Identifier: Apache-2.0
+
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: kpack.community.tanzu.vmware.com
+spec:
+  displayName: "kpack"
+  longDescription: ""
+  shortDescription: ""
+  supportDescription: ""
+  providerName: "VMware"
+  maintainers:
+    - name: "Matthew McNew"
+    - name: "Tom Kennedy"
+    - name: "Kenneth DuMez"
+    - name: "Tyler Phelan"
+    - name: "Viraj Patel"
+    - name: "Matt Gibson"

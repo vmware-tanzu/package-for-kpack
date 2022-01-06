@@ -1,0 +1,67 @@
+#! Copyright 2021 VMware, Inc.
+#! SPDX-License-Identifier: Apache-2.0
+
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("values.star", "kp_default_docker_configjson")
+
+#@ if data.values.kp_default_repository != "":
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  kp-config
+  namespace: kpack
+data:
+  default.repository: #@ data.values.kp_default_repository
+  default.repository.serviceaccount: kp-default-repository-serviceaccount
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kp-default-repository-serviceaccount
+  namespace:  kpack
+imagePullSecrets:
+  - name: kp-default-repository-secret
+secrets:
+  - name: kp-default-repository-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kp-default-repository-secret
+  namespace: kpack
+  annotations:
+    kapp.k14s.io/versioned: ""
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: #@ kp_default_docker_configjson
+
+#@overlay/match by=overlay.subset({"metadata":{"name":"kpack-controller"}, "kind": "Deployment"})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: controller
+          #@overlay/match missing_ok=True
+          env:
+            #@overlay/append
+            - name: CREDENTIAL_PROVIDER_SECRET_PATH
+              value: /var/kpack/credentials
+          #@overlay/match missing_ok=True
+          volumeMounts:
+            #@overlay/append
+            - name: credentials
+              mountPath: /var/kpack/credentials
+              readOnly: true
+      #@overlay/match missing_ok=True
+      volumes:
+        #@overlay/append
+        - name: credentials
+          secret:
+            secretName:  kp-default-repository-secret
+
+#@ end
