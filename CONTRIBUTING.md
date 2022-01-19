@@ -1,6 +1,6 @@
 # Contributing to package-for-kpack
 
-The package-for-kpack project team welcomes contributions from the community.  If you wish to contribute code and you have not signed our [contributor license agreement] (https://cla.vmware.com/cla/1/preview) (CLA), our bot will update the issue when you open a Pull Request. For any questions about the CLA process, please refer to our [FAQ](https://cla.vmware.com/faq).
+The package-for-kpack project team welcomes contributions from the community.  If you wish to contribute code and you have not signed our [contributor license agreement](https://cla.vmware.com/cla/1/preview) (CLA), our bot will update the issue when you open a Pull Request. For any questions about the CLA process, please refer to our [FAQ](https://cla.vmware.com/faq).
 
 ## Contribution Flow
 
