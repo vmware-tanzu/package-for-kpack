@@ -1,7 +1,6 @@
 #! Copyright 2021 VMware, Inc.
 #! SPDX-License-Identifier: Apache-2.0
 
-#@ load("@ytt:data", "data")
 #@ load("@ytt:overlay", "overlay")
 
 #@overlay/match by=overlay.subset({"metadata":{"name":"kpack-controller"}, "kind": "Deployment"})
