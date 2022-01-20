@@ -37,7 +37,7 @@ The following configuration values can be set to customize the kpack installatio
 > If you do no want to set those values, you can follow the [kubectl flow](#getting-started-with-kpack-using-kubectl) below.
 > If you forgot to provide them at install, you can update your values and then update the install using the `tanzu` cli.
 
-> Note: This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has been downloaded. It can be installed using [homebrew](https://github.com/vmware-tanzu/homebrew-kpack-cli), by downloading from the [github release](https://github.com/vmware-tanzu/kpack-cli/releases), or through a [docker image](https://hub.docker.com/r/kpack/kp).
+> Note: This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has been downloaded. It can be installed using [homebrew](https://github.com/vmware-tanzu/homebrew-kpack-cli), by downloading from the [github release](https://github.com/vmware-tanzu/kpack-cli/releases), or through a [Docker image](https://hub.docker.com/r/kpack/kp).
 
 1. Log in to the `kp_default_repository` locally.
 
@@ -46,10 +46,10 @@ The following configuration values can be set to customize the kpack installatio
     ```
 
    > Note: The `<REGISTRY-HOSTNAME>` must be the registry prefix for its corresponding registry
-   > - For [dockerhub](https://hub.docker.com/) this should be `https://index.docker.io/v1/`. `kp` also offers a simplified way to create a dockerhub secret with a `--dockerhub` flag.
+   > - For [Dockerhub](https://hub.docker.com/) this should be `https://index.docker.io/v1/`. `kp` also offers a simplified way to create a Dockerhub secret with a `--dockerhub` flag.
    > - For [GCR](https://cloud.google.com/container-registry/) this should be `gcr.io`. If you use GCR then the username can be `_json_key` and the password can be the JSON credentials you get from the GCP UI (under `IAM -> Service Accounts` create an account or edit an existing one and create a key with type JSON). `kp` also offers a simplified way to create a gcr secret with a `--gcr` flag.
 
-2. Create a cluster store
+2. Create a ClusterStore.
 
    A store resource is a repository of [buildpacks](http://buildpacks.io/) packaged
    in [buildpackages](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/) that can be used by kpack
@@ -62,9 +62,9 @@ The following configuration values can be set to customize the kpack installatio
     kp clusterstore save default -b gcr.io/paketo-buildpacks/java
     ```
 
-   > Note: Buildpacks are packaged and distributed as buildpackages which are OCI images available on a docker registry. Buildpackages for other languages are available from [paketo](https://github.com/paketo-buildpacks).
+   > Note: Buildpacks are packaged and distributed as buildpackages which are OCI images available on a Docker registry. Buildpackages for other languages are available from [paketo](https://github.com/paketo-buildpacks).
 
-3. Create a cluster stack
+3. Create a ClusterStack.
 
    A stack resource is the specification for
    a [cloud native buildpacks stack](https://buildpacks.io/docs/concepts/components/stack/) used during build and in the
@@ -76,13 +76,13 @@ The following configuration values can be set to customize the kpack installatio
     kp clusterstack save base --build-image paketobuildpacks/build:base-cnb --run-image paketobuildpacks/run:base-cnb
     ```
 
-4. Create a Builder
+4. Create a Builder.
 
    A Builder is the kpack configuration for a [builder image](https://buildpacks.io/docs/concepts/components/builder/)
    that includes the stack and buildpacks needed to build an OCI image from your app source code.
 
-   The Builder configuration will write to the registry with the secret configured in step one and will reference the
-   stack and store created in step three and four. The builder order will determine the order in which buildpacks are
+   The Builder configuration will write to the registry with the secret configured in step #1 and will reference the
+   stack and store created in step #3 and step #4. The builder order will determine the order in which buildpacks are
    used in the builder.
 
     ```
@@ -96,7 +96,7 @@ The following configuration values can be set to customize the kpack installatio
 
     - Replace `<IMAGE-TAG>` with a valid, writeable image tag that exists in the same registry as the `kp_default_repository`. The tag should be something like: `your-name/builder` or `gcr.io/your-project/builder`
 
-5. Create a secret with push credentials for the docker registry that you plan on publishing OCI images to with kpack.
+5. Create a secret with push credentials for the Docker registry that you plan on publishing OCI images to with kpack.
 
    The easiest way to do that is with `kp secret save`
 
@@ -108,7 +108,7 @@ The following configuration values can be set to customize the kpack installatio
     ```
 
    > Note: The `<REGISTRY-HOSTNAME>` must be the registry prefix for its corresponding registry
-   > - For [dockerhub](https://hub.docker.com/) this should be `https://index.docker.io/v1/`. `kp` also offers a simplified way to create a dockerhub secret with a `--dockerhub` flag.
+   > - For [Dockerhub](https://hub.docker.com/) this should be `https://index.docker.io/v1/`. `kp` also offers a simplified way to create a Dockerhub secret with a `--dockerhub` flag.
    > - For [GCR](https://cloud.google.com/container-registry/) this should be `gcr.io`. If you use GCR then the username can be `_json_key` and the password can be the JSON credentials you get from the GCP UI (under `IAM -> Service Accounts` create an account or edit an existing one and create a key with type JSON). `kp` also offers a simplified way to create a gcr secret with a `--gcr` flag.
 
    Your secret create should look something like this:
@@ -123,17 +123,17 @@ The following configuration values can be set to customize the kpack installatio
    > Note: Learn more about kpack secrets with the [kpack secret documentation](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
 
 
-6. Create a kpack image resource
+6. Create a kpack Image Resource.
 
-   An image resource is the specification for an OCI image that kpack should build and manage.
+   An Image Resource is the specification for an OCI image that kpack should build and manage.
 
-   We will create a sample image resource that builds with the builder created in step #4.
+   We will create a sample Image Resource that builds with the builder created in step #4.
 
    The example included here utilizes
    the [Spring Pet Clinic sample app](https://github.com/spring-projects/spring-petclinic). We encourage you to
    substitute it with your own application.
 
-   Create an image resource:
+   Create an Image Resource:
 
     ```yaml
     kp image save tutorial-image \
@@ -149,13 +149,13 @@ The following configuration values can be set to customize the kpack installatio
     - If you are using your application source, replace `--git` & `--git-revision`.
    > Note: To use a private git repo follow the instructions in [secrets](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
 
-   You can now check the status of the image resource.
+   You can now check the status of the Image Resource.
 
    ```bash
    kp image status tutorial-image -n default
    ```
 
-   You should see that the image resource has a status Building as it is currently building.
+   You should see that the Image Resource has a status Building as it is currently building.
 
     ```
     Status:         Building
@@ -180,14 +180,14 @@ The following configuration values can be set to customize the kpack installatio
     Build Reason:    --
     ```
 
-   You can tail the logs for image resource that is currently building using
+   You can tail the logs for Image Resource that is currently building using
    the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md)
 
     ```
     kp build logs tutorial-image -n default
     ``` 
 
-   Once the image resource finishes building you can get the fully resolved built OCI image with `kp`
+   Once the Image Resource finishes building you can get the fully resolved built OCI image with `kp`
 
     ```bash
     kp image status tutorial-image -n default
@@ -229,9 +229,9 @@ The following configuration values can be set to customize the kpack installatio
 
    The latest built OCI image is available to be used locally via `docker pull` and in a Kubernetes deployment.
 
-7. Run the built app locally
+7. Run the built application image locally.
 
-   Download the latest built OCI image available in step #6 and run it with docker.
+   Download the latest built OCI image available in step #6 and run it with Docker.
 
    ```bash
    docker run -p 8080:8080 <latest-image-with-digest>
@@ -254,17 +254,17 @@ The following configuration values can be set to customize the kpack installatio
     :: Built with Spring Boot :: 2.2.2.RELEASE
    ``` 
 
-8. kpack rebuilds
+8. Rebuilding kpack Image Resources.
 
-   We recommend updating the kpack image resource with a CI/CD tool when new commits are ready to be built.
+   We recommend updating the kpack Image Resource with a CI/CD tool when new commits are ready to be built.
    > Note: You can also provide a branch or tag as the `spec.git.revision` and kpack will poll and rebuild on updates!
 
-   We can simulate an update from a CI/CD tool by updating the `spec.git.revision` on the image resource configured in step #6.
+   We can simulate an update from a CI/CD tool by updating the `spec.git.revision` on the Image Resource configured in step #6.
 
    If you are using your own application please push an updated commit and use the new commit sha. If you are using
    Spring Pet Clinic you can update the revision to: `4e1f87407d80cdb4a5a293de89d62034fdcbb847`.
 
-   Edit the image resource with:
+   Edit the Image Resource with:
    ```
    kp image save tutorial-image --git-revision 4e1f87407d80cdb4a5a293de89d62034fdcbb847 -n default
    ``` 
@@ -281,7 +281,7 @@ The following configuration values can be set to customize the kpack installatio
    2        BUILDING                                                    CONFIG
    ```
 
-   You can tail the logs for the image resource with the kp cli used in step #6.
+   You can tail the logs for the Image Resource with the kp cli used in step #6.
 
    ```
    kp build logs tutorial-image -n default
@@ -289,15 +289,15 @@ The following configuration values can be set to customize the kpack installatio
 
    > Note: This second build should be notably faster because the buildpacks can leverage the cache from the previous build.
 
-9. Next steps
+9. Next steps.
 
    The next time new buildpacks are added to the store, kpack will automatically rebuild the builder. If the updated
-   buildpacks were used by the tutorial image resource, kpack will automatically create a new build to rebuild your OCI image.
+   buildpacks were used by the tutorial Image Resource, kpack will automatically create a new build to rebuild your OCI image.
 
 
 ### Getting started with kpack using `kubectl`
 
-1. Create a secret with push credentials for the docker registry that you plan on publishing OCI images to with kpack.
+1. Create a secret with push credentials for the Docker registry that you plan on publishing OCI images to with kpack.
 
    The easiest way to do that is with `kubectl secret create docker-registry`
 
@@ -309,7 +309,7 @@ The following configuration values can be set to customize the kpack installatio
         --namespace default
     ```
 
-   > Note: The docker server must be the registry prefix for its corresponding registry. For [dockerhub](https://hub.docker.com/) this should be `https://index.docker.io/v1/`.
+   > Note: The Docker server must be the registry prefix for its corresponding registry. For [Dockerhub](https://hub.docker.com/) this should be `https://index.docker.io/v1/`.
    For [GCR](https://cloud.google.com/container-registry/) this should be `gcr.io`. If you use GCR then the username can be `_json_key` and the password can be the JSON credentials you get from the GCP UI (under `IAM -> Service Accounts` create an account or edit an existing one and create a key with type JSON).
 
    Your secret create should look something like this:
@@ -324,7 +324,7 @@ The following configuration values can be set to customize the kpack installatio
 
    > Note: Learn more about kpack secrets with the [kpack secret documentation](secrets.md)
 
-2. Create a service account that references the registry secret created above
+2. Create a service account that references the registry secret created above.
 
     ```yaml
     apiVersion: v1
@@ -344,7 +344,7 @@ The following configuration values can be set to customize the kpack installatio
      kubectl apply -f service-account.yaml
      ```
 
-3. Create a cluster store configuration
+3. Create a ClusterStore.
 
    A store resource is a repository of [buildpacks](http://buildpacks.io/) packaged in [buildpackages](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/) that can be used by kpack to build OCI images. Later in this tutorial, you will reference this store in a Builder configuration.
 
@@ -367,9 +367,9 @@ The following configuration values can be set to customize the kpack installatio
     kubectl apply -f store.yaml
     ```
 
-   > Note: Buildpacks are packaged and distributed as buildpackages which are docker images available on a docker registry. Buildpackages for other languages are available from [paketo](https://github.com/paketo-buildpacks).
+   > Note: Buildpacks are packaged and distributed as buildpackages which are Docker images available on a Docker registry. Buildpackages for other languages are available from [paketo](https://github.com/paketo-buildpacks).
 
-4. Create a cluster stack configuration
+4. Create a ClusterStack.
 
    A stack resource is the specification for a [cloud native buildpacks stack](https://buildpacks.io/docs/concepts/components/stack/) used during build and in the resulting app image.
 
@@ -394,11 +394,11 @@ The following configuration values can be set to customize the kpack installatio
     kubectl apply -f stack.yaml
     ```
 
-5. Create a Builder configuration
+5. Create a Builder.
 
    A Builder is the kpack configuration for a [builder image](https://buildpacks.io/docs/concepts/components/builder/) that includes the stack and buildpacks needed to build an OCI image from your app source code.
 
-   The Builder configuration will write to the registry with the secret configured in step one and will reference the stack and store created in step three and four. The builder order will determine the order in which buildpacks are used in the builder.
+   The Builder configuration will write to the registry with the secret configured in step #1 and will reference the stack and store created in step #3 and step #4. The builder order will determine the order in which buildpacks are used in the builder.
 
     ```yaml
     apiVersion: kpack.io/v1alpha2
@@ -430,15 +430,15 @@ The following configuration values can be set to customize the kpack installatio
      kubectl apply -f builder.yaml
      ```
 
-6. Apply a kpack image resource
+6. Create a kpack Image Resource.
 
-   An image resource is the specification for an OCI image that kpack should build and manage.
+   An Image Resource is the specification for an OCI image that kpack should build and manage.
 
-   We will create a sample image resource that builds with the builder created in step five.
+   We will create a sample Image Resource that builds with the builder created in step #5.
 
    The example included here utilizes the [Spring Pet Clinic sample app](https://github.com/spring-projects/spring-petclinic). We encourage you to substitute it with your own application.
 
-   Create an image resource:
+   Create an Image Resource:
 
     ```yaml
     apiVersion: kpack.io/v1alpha2
@@ -462,19 +462,19 @@ The following configuration values can be set to customize the kpack installatio
     - If you are using your application source, replace `source.git.url` & `source.git.revision`.
    > Note: To use a private git repo follow the instructions in [secrets](secrets.md)
 
-   Apply that image resource to the cluster
+   Apply that Image Resource to the cluster
 
     ```bash
     kubectl apply -f image.yaml
     ```
 
-   You can now check the status of the image resource.
+   You can now check the status of the Image Resource.
 
    ```bash
    kubectl -n default get images
    ```
 
-   You should see that the image resource has an unknown READY status as it is currently building.
+   You should see that the Image Resource has an unknown READY status as it is currently building.
 
    ```
     NAME                  LATESTIMAGE   READY
@@ -487,7 +487,7 @@ The following configuration values can be set to customize the kpack installatio
     kp build logs tutorial-image -n default
     ``` 
 
-   Once the image resource finishes building you can get the fully resolved built OCI image with `kubectl get`
+   Once the Image Resource finishes building you can get the fully resolved built OCI image with `kubectl get`
 
     ```
     kubectl -n default get image tutorial-image
@@ -501,9 +501,9 @@ The following configuration values can be set to customize the kpack installatio
 
    The latest OCI image is available to be used locally via `docker pull` and in a Kubernetes deployment.
 
-8. Run the built app locally
+8. Run the built application image locally.
 
-   Download the latest OCI image available in step #6 and run it with docker.
+   Download the latest OCI image available in step #6 and run it with Docker.
 
    ```bash
    docker run -p 8080:8080 <latest-image-with-digest>
@@ -526,16 +526,16 @@ The following configuration values can be set to customize the kpack installatio
     :: Built with Spring Boot :: 2.2.2.RELEASE
    ``` 
 
-9. Rebuilding kpack Images
+9. Rebuilding kpack Image Resources.
 
-   We recommend updating the kpack image resource with a CI/CD tool when new commits are ready to be built.
+   We recommend updating the kpack Image Resource with a CI/CD tool when new commits are ready to be built.
    > Note: You can also provide a branch or tag as the `spec.git.revision` and kpack will poll and rebuild on updates!
 
-   We can simulate an update from a CI/CD tool by updating the `spec.git.revision` on the image resource used in step #6.
+   We can simulate an update from a CI/CD tool by updating the `spec.git.revision` on the Image Resource used in step #6.
 
    If you are using your own application push an updated commit and use the new commit sha. If you are using Spring Pet Clinic you can update the revision to: `4e1f87407d80cdb4a5a293de89d62034fdcbb847`.
 
-   Edit the image resource with:
+   Edit the Image Resource with:
    ```
    kubectl -n default edit image tutorial-image 
    ``` 
@@ -560,6 +560,6 @@ The following configuration values can be set to customize the kpack installatio
 
    > Note: This second build should be notably faster because the buildpacks can leverage the cache from the previous build.
 
-10. Next steps
+10. Next steps.
 
-    The next time new buildpacks are added to the store, kpack will automatically rebuild the builder. If the updated buildpacks were used by the tutorial image resource, kpack will automatically create a new build to rebuild your OCI image.
+    The next time new buildpacks are added to the store, kpack will automatically rebuild the builder. If the updated buildpacks were used by the tutorial Image Resource, kpack will automatically create a new build to rebuild your OCI image.
