@@ -1,6 +1,6 @@
-# Package for kpack
+# kpack
 
-[kpack](https://github.com/pivotal/kpack) utilizes unprivileged kubernetes primitives to provide builds of OCI images as a platform implementation of [Cloud Native Buildpacks](https://buildpacks.io) (CNB).
+[kpack](https://github.com/pivotal/kpack) utilizes unprivileged Kubernetes primitives to provide builds of OCI images as a platform implementation of [Cloud Native Buildpacks](https://buildpacks.io) (CNB).
 
 ## Components
 
@@ -10,9 +10,9 @@
 
 The following tables shows the providers this package can work with.
 
-| GKE | AKS | EKS | vSphere | Minikube |
-|-----|-----|-----|---------|----------|
-| ✅   | ✅   | ✅   | ✅       | ✅        |
+ | AKS | EKS | vSphere | Docker |
+|-----|-----|---------|--------|
+| ✅   | ✅   | ✅       | ✅      |
 
 ## Configuration
 
@@ -33,7 +33,11 @@ The following configuration values can be set to customize the kpack installatio
 
 ### Getting started with kpack using the `kp` cli
 
-This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has been downloaded. It can be installed using a [homebrew tap](https://github.com/vmware-tanzu/homebrew-kpack-cli), by downloading from the [github release](https://github.com/vmware-tanzu/kpack-cli/releases) or through a [docker image](https://hub.docker.com/r/kpack/kp).
+> Note: This guide assumes that you have provided the `kp_default_repository` values during install.
+> If you do no want to set those values, you can follow the [kubectl flow](#getting-started-with-kpack-using-kubectl) below.
+> If you forgot to provide them at install, you can update your values and then update the install using the `tanzu` cli.
+
+> Note: This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has been downloaded. It can be installed using [homebrew](https://github.com/vmware-tanzu/homebrew-kpack-cli), by downloading from the [github release](https://github.com/vmware-tanzu/kpack-cli/releases), or through a [docker image](https://hub.docker.com/r/kpack/kp).
 
 1. Log in to the `kp_default_repository` locally.
 
@@ -44,10 +48,6 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
    > Note: The `<REGISTRY-HOSTNAME>` must be the registry prefix for its corresponding registry
    > - For [dockerhub](https://hub.docker.com/) this should be `https://index.docker.io/v1/`. `kp` also offers a simplified way to create a dockerhub secret with a `--dockerhub` flag.
    > - For [GCR](https://cloud.google.com/container-registry/) this should be `gcr.io`. If you use GCR then the username can be `_json_key` and the password can be the JSON credentials you get from the GCP UI (under `IAM -> Service Accounts` create an account or edit an existing one and create a key with type JSON). `kp` also offers a simplified way to create a gcr secret with a `--gcr` flag.
-
-   > Note: The `<REPOSITORY>` must be a location in the docker registry that can be written to with the credentials
-   > - For [dockerhub](https://hub.docker.com/) this should be `my-username/my-repo`.
-   > - For [GCR](https://cloud.google.com/container-registry/) this should be `gcr.io/my-project/my-repo`.
 
 2. Create a cluster store
 
@@ -94,7 +94,7 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
       -n default
     ```
 
-    - Replace `<IMAGE-TAG>` with a valid image tag that exists in the registry you configured with the `--registry` flag when creating a Secret in step #1. The tag should be something like: `your-name/builder` or `gcr.io/your-project/builder`
+    - Replace `<IMAGE-TAG>` with a valid, writeable image tag that exists in the same registry as the `kp_default_repository`. The tag should be something like: `your-name/builder` or `gcr.io/your-project/builder`
 
 5. Create a secret with push credentials for the docker registry that you plan on publishing OCI images to with kpack.
 
@@ -120,14 +120,14 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
        -n default
     ```
 
-   > Note: Learn more about kpack secrets with the [kpack secret documentation](https://github.com/pivotal/kpack/blob/main/docs/secrets.mdd)
+   > Note: Learn more about kpack secrets with the [kpack secret documentation](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
 
 
 6. Create a kpack image resource
 
    An image resource is the specification for an OCI image that kpack should build and manage.
 
-   We will create a sample image resource that builds with the builder created in step five.
+   We will create a sample image resource that builds with the builder created in step #4.
 
    The example included here utilizes
    the [Spring Pet Clinic sample app](https://github.com/spring-projects/spring-petclinic). We encourage you to
@@ -187,7 +187,7 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
     kp build logs tutorial-image -n default
     ``` 
 
-   Once the image resource finishes building you can get the fully resolved built OCI image with `kubectl get`
+   Once the image resource finishes building you can get the fully resolved built OCI image with `kp`
 
     ```bash
     kp image status tutorial-image -n default
@@ -227,7 +227,7 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
     Build Reason:    --
     ```
 
-   The latest built OCI image is available to be used locally via `docker pull` and in a kubernetes deployment.
+   The latest built OCI image is available to be used locally via `docker pull` and in a Kubernetes deployment.
 
 7. Run the built app locally
 
@@ -287,7 +287,7 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
    kp build logs tutorial-image -n default
    ```
 
-   > Note: This second build should be notably faster because the buildpacks are able to leverage the cache from the previous build.
+   > Note: This second build should be notably faster because the buildpacks can leverage the cache from the previous build.
 
 9. Next steps
 
@@ -295,7 +295,7 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
    buildpacks were used by the tutorial image resource, kpack will automatically create a new build to rebuild your OCI image.
 
 
-### Getting started with kpack using the `kubectl`
+### Getting started with kpack using `kubectl`
 
 1. Create a secret with push credentials for the docker registry that you plan on publishing OCI images to with kpack.
 
@@ -481,7 +481,7 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
     tutorial-image                      Unknown
     ```
 
-   You can tail the logs the image that is currently building using the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md)
+   You can tail the logs for the image that is currently building using the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md)
 
     ```
     kp build logs tutorial-image -n default
@@ -499,7 +499,7 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
     default     tutorial-image        index.docker.io/your-project/app@sha256:6744b...   True
     ```
 
-   The latest OCI image is available to be used locally via `docker pull` and in a kubernetes deployment.
+   The latest OCI image is available to be used locally via `docker pull` and in a Kubernetes deployment.
 
 8. Run the built app locally
 
@@ -526,14 +526,14 @@ This guide assumes that [`kp`](https://github.com/vmware-tanzu/kpack-cli) has be
     :: Built with Spring Boot :: 2.2.2.RELEASE
    ``` 
 
-9. kpack rebuilds
+9. Rebuilding kpack Images
 
    We recommend updating the kpack image resource with a CI/CD tool when new commits are ready to be built.
    > Note: You can also provide a branch or tag as the `spec.git.revision` and kpack will poll and rebuild on updates!
 
    We can simulate an update from a CI/CD tool by updating the `spec.git.revision` on the image resource used in step #6.
 
-   If you are using your own application please push an updated commit and use the new commit sha. If you are using Spring Pet Clinic you can update the revision to: `4e1f87407d80cdb4a5a293de89d62034fdcbb847`.
+   If you are using your own application push an updated commit and use the new commit sha. If you are using Spring Pet Clinic you can update the revision to: `4e1f87407d80cdb4a5a293de89d62034fdcbb847`.
 
    Edit the image resource with:
    ```
