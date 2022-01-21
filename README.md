@@ -106,8 +106,8 @@ installation.
    that includes the stack and buildpacks needed to build an OCI image from your
    app source code.
 
-   The Builder configuration will write to the registry with the secret created from the `kp_default_repository` values 
-   provided at install and will reference the stack and store created in step #2 and step #3. 
+   The Builder configuration will write to the registry with the secret created from the `kp_default_repository` values
+   provided at install and will reference the stack and store created in step #2 and step #3.
    The [Builder order](https://github.com/pivotal/kpack/blob/main/docs/builders.md#order) will determine the order in which buildpacks are used in the Builder.
 
     ```bash
