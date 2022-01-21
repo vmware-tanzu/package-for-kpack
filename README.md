@@ -70,9 +70,8 @@ installation.
 
 2. Create a ClusterStore.
 
-   A store resource is a repository of [buildpacks](http://buildpacks.io/)
-   packaged
-   in [buildpackages](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/)
+   A ClusterStore resource is a repository of [buildpacks](http://buildpacks.io/)
+   packaged in [buildpackages](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/)
    that can be used by kpack to build OCI images. Later in this tutorial, you
    will reference this store in a Builder configuration.  
 
@@ -91,7 +90,7 @@ installation.
 
 3. Create a ClusterStack.
 
-   A stack resource is the specification for a [cloud native buildpacks stack](https://buildpacks.io/docs/concepts/components/stack/)
+   A ClusterStack resource is the specification for a [cloud native buildpacks stack](https://buildpacks.io/docs/concepts/components/stack/)
    used during build and in the resulting app image.
 
    We recommend starting with the [paketo base stack](https://github.com/paketo-buildpacks/stacks) as shown below:
