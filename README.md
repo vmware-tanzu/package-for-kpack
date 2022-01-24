@@ -530,7 +530,7 @@ installation.
       or `gcr.io/your-project/app`
     * If you are using your application source, replace `source.git.url`
       & `source.git.revision`.
-   > Note: To use a private git repo follow the instructions in [secrets](secrets.md)
+   > Note: To use a private git repo follow the instructions in [secrets](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
 
    Apply that Image Resource to the cluster
 
@@ -649,3 +649,8 @@ installation.
    automatically rebuild the builder. If the updated buildpacks were used by
    the tutorial Image Resource, kpack will automatically create a new build to
    rebuild your OCI image.
+
+## Additional Resources
+
+* [kpack documentation](https://github.com/pivotal/kpack/tree/main/docs)
+* [Slack channel](https://kubernetes.slack.com/channels/kpack)
