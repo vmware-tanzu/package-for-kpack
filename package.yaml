@@ -10,7 +10,7 @@ metadata:
 spec:
   refName: kpack.community.tanzu.vmware.com
   version: #@ data.values.version
-  capacityRequirementsDescription: Cluster with nodes > 50GB ephemeral storage, Registry > 5GB available space
+  capacityRequirementsDescription: Registry with > 1GB available space
   releaseNotes: #@ "https://github.com/pivotal/kpack/releases/tag/v" + data.values.version
   valuesSchema:
     openAPIv3:
