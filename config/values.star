@@ -27,5 +27,3 @@ if data.values.kp_default_repository != "":
     kp_default_docker_creds = {"username": data.values.kp_default_repository_username, "password": data.values.kp_default_repository_password, "auth": kp_default_docker_auth}
     kp_default_docker_configjson = base64.encode(json.encode({"auths": {kp_default_registry: kp_default_docker_creds}}))
 end
-
-

@@ -455,9 +455,8 @@ installation.
    app source code.
 
    The Builder configuration will write to the registry with the secret
-   configured in step #1 and will reference the stack and store created in step
-   #3 and step #4. The builder order will determine the order in which
-   buildpacks are used in the builder.
+   configured in step #1 and will reference the stack and store created in step #3 and step #4.
+   The builder order will determine the order in which buildpacks are used in the builder.
 
     ```yaml
     apiVersion: kpack.io/v1alpha2
