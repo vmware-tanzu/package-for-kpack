@@ -2,15 +2,15 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - githubRelease:
-      url: https://api.github.com/repos/pivotal/kpack/releases/55222486
+      url: https://api.github.com/repos/pivotal/kpack/releases/59362720
     path: .
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #906 from pivotal/fix-kpack-tests...'
-      sha: 524cbf3a1f074810967537936a77005f1f83ec68
+      commitTitle: 'Merge pull request #918 from pivotal/containerd-159...'
+      sha: 16033ad52115e4e10f77e7289212e11f552fa399
       tags:
-      - v0.5.0
+      - v0.5.1
     path: .
   path: test
 kind: LockConfig

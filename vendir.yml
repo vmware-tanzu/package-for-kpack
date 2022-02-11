@@ -10,7 +10,7 @@ directories:
       - path: .
         githubRelease:
           slug: pivotal/kpack
-          tag: v0.5.0
+          tag: v0.5.1
           assetNames: ["release-*.yaml"]
   - path: test
     contents:
@@ -19,5 +19,5 @@ directories:
         url: https://github.com/pivotal/kpack
         refSelection:
           semver:
-            constraints: "0.5.0"
+            constraints: "0.5.1"
       newRootPath: test
