@@ -11,3 +11,5 @@ kp_default_repository_password: ""
 http_proxy: ""
 https_proxy: ""
 no_proxy: ""
+
+ca_cert_data: ""
