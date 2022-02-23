@@ -31,7 +31,7 @@ installation.
 | `http_proxy`                     | Optional          | The HTTP proxy to use for network traffic                                                                                                                                                                                                          |
 | `https_proxy`                    | Optional          | The HTTPS proxy to use for network traffic                                                                                                                                                                                                         |
 | `no_proxy`                       | Optional          | A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy                                                                                                                                         |
-| `ca_cert_data`                   | Optional          | CA Certificate to be injected into the kpack controller trust store for communicating with self signed registries. (Note: This will not be injected into builds, you need to use teh cert injection webhook with the `kpack.io/build` label value) |
+| `ca_cert_data`                   | Optional          | CA Certificate to be injected into the kpack controller trust store for communicating with self signed registries. (Note: This will not be injected into builds, you need to use the cert injection webhook with the `kpack.io/build` label value) |
 
 ## Usage Example
 
