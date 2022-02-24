@@ -40,6 +40,9 @@ spec:
         no_proxy:
           type: string
           description: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy
+        ca_cert_data:
+          type: string
+          description: CA Certificate to be injected into the kpack controller trust store for communicating with self signed registries.
   template:
     spec:
       fetch:
