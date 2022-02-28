@@ -33,9 +33,15 @@ installation.
 | `no_proxy`                       | Optional          | A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy                                                                                                                                         |
 | `ca_cert_data`                   | Optional          | CA Certificate to be injected into the kpack controller trust store for communicating with self signed registries. (Note: This will not be injected into builds, you need to use the cert injection webhook with the `kpack.io/build` label value) |
 
-## Usage Example
+## Installation 
 
-### Getting started with kpack using the `kp` cli
+### Package Installation steps
+
+You can install the kpack package using the command below - 
+
+`tanzu package install kpack --package-name kpack.community.tanzu.vmware.com --version 0.5.1 -f kpack-config-values.yaml`
+
+### Installing kpack using the `kp` cli
 
 > Note: This guide assumes that you have provided
 > the `kp_default_repository` values during install.
@@ -152,194 +158,7 @@ installation.
 
    > Note: Learn more about kpack secrets with the [kpack secret documentation](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
 
-6. Create a kpack Image Resource.
-
-   An Image Resource is the specification for an OCI image that kpack should build and manage.
-
-   We will create a sample Image Resource that builds with the builder created
-   in step #4.
-
-   The example included here utilizes the [Spring Pet Clinic sample app](https://github.com/spring-projects/spring-petclinic).
-   We encourage you to substitute it with your own application.
-
-   Create an Image Resource:
-
-    ```yaml
-    kp image save tutorial-image \
-      --tag <IMAGE-TAG> \
-      --git https://github.com/spring-projects/spring-petclinic \
-      --git-revision 82cb521d636b282340378d80a6307a08e3d4a4c4 \
-      --builder my-builder \
-      -n default
-    ```
-
-    * Make sure to replace `<IMAGE-TAG>` with the tag in the registry of the
-      secret you configured in step #5. Something like:
-      `your-name/app` or `gcr.io/your-project/app`
-    * If you are using your application source, replace `--git`
-      & `--git-revision`.
-   > Note: To use a private git repo follow the instructions in [secrets](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
-
-   You can now check the status of the Image Resource.
-
-   ```bash
-   kp image status tutorial-image -n default
-   ```
-
-   You should see that the Image Resource has a status Building as it is
-   currently building.
-
-    ```text
-    Status:         Building
-    Message:        --
-    LatestImage:    --
-
-    Source
-    Type:        GitUrl
-    Url:         https://github.com/spring-projects/spring-petclinic
-    Revision:    82cb521d636b282340378d80a6307a08e3d4a4c4
-
-    Builder Ref
-    Name:    base
-    Kind:    Builder
-
-    Last Successful Build
-    Id:              --
-    Build Reason:    --
-
-    Last Failed Build
-    Id:              --
-    Build Reason:    --
-    ```
-
-   You can tail the logs for Image Resource that is currently building using
-   the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md)
-
-    ```bash
-    kp build logs tutorial-image -n default
-    ```
-
-   Once the Image Resource finishes building you can get the fully resolved
-   built OCI image with `kp`
-
-    ```bash
-    kp image status tutorial-image -n default
-    ```
-
-   The output should look something like this:
-
-    ```text
-    Status:         Ready
-    Message:        --
-    LatestImage:    index.docker.io/your-project/app@sha256:6744b...
-
-    Source
-    Type:        GitUrl
-    Url:         https://github.com/spring-projects/spring-petclinic
-    Revision:    82cb521d636b282340378d80a6307a08e3d4a4c4
-
-    Builder Ref
-    Name:    base
-    Kind:    Builder
-
-    Last Successful Build
-    Id:              1
-    Build Reason:    BUILDPACK
-    Git Revision:    82cb521d636b282340378d80a6307a08e3d4a4c4
-
-    BUILDPACK ID                           BUILDPACK VERSION    HOMEPAGE
-    paketo-buildpacks/ca-certificates      2.4.0                https://github.com/paketo-buildpacks/ca-certificates
-    paketo-buildpacks/bellsoft-liberica    8.4.0                https://github.com/paketo-buildpacks/bellsoft-liberica
-    paketo-buildpacks/gradle               5.5.0                https://github.com/paketo-buildpacks/gradle
-    paketo-buildpacks/executable-jar       5.2.0                https://github.com/paketo-buildpacks/executable-jar
-    paketo-buildpacks/apache-tomcat        6.1.0                https://github.com/paketo-buildpacks/apache-tomcat
-    paketo-buildpacks/dist-zip             4.2.0                https://github.com/paketo-buildpacks/dist-zip
-    paketo-buildpacks/spring-boot          4.5.0                https://github.com/paketo-buildpacks/spring-boot
-
-    Last Failed Build
-    Id:              --
-    Build Reason:    --
-    ```
-
-   The latest built OCI image is available to be used locally via `docker pull`
-   and in a Kubernetes deployment.
-
-7. Run the built application image locally.
-
-   Download the latest built OCI image available in step #6 and run it with
-   Docker.
-
-   ```bash
-   docker run -p 8080:8080 <latest-image-with-digest>
-   ```
-
-   You should see the java app start up:
-
-   ```text
-
-              |\      _,,,--,,_
-             /,`.-'`'   ._  \-;;,_
-    _______ __|,4-  ) )_   .;.(__`'-'__     ___ __    _ ___ _______
-    |       | '---''(_/._)-'(_\_)   |   |   |   |  |  | |   |       |
-    |    _  |    ___|_     _|       |   |   |   |   |_| |   |       | __ _ _
-    |   |_| |   |___  |   | |       |   |   |   |       |   |       | \ \ \ \
-    |    ___|    ___| |   | |      _|   |___|   |  _    |   |      _|  \ \ \ \
-    |   |   |   |___  |   | |     |_|       |   | | |   |   |     |_    ) ) ) )
-    |___|   |_______| |___| |_______|_______|___|_|  |__|___|_______|  / / / /
-    ==================================================================/_/_/_/
-
-    :: Built with Spring Boot :: 2.2.2.RELEASE
-   ```
-
-8. Rebuilding kpack Image Resources.
-
-   We recommend updating the kpack Image Resource with a CI/CD tool when new
-   commits are ready to be built.
-   > Note: You can also provide a branch or tag as the `spec.git.revision` and kpack will poll and rebuild on updates!
-
-   We can simulate an update from a CI/CD tool by updating
-   the `spec.git.revision` on the Image Resource configured in step #6.
-
-   If you are using your own application please push an updated commit and use
-   the new commit sha. If you are using Spring Pet Clinic you can update the
-   revision to: `4e1f87407d80cdb4a5a293de89d62034fdcbb847`.
-
-   Edit the Image Resource with:
-
-   ```bash
-   kp image save tutorial-image --git-revision 4e1f87407d80cdb4a5a293de89d62034fdcbb847 -n default
-   ```
-
-   You should see kpack schedule a new build by running:
-
-   ```bash
-   kp build list tutorial-image -n default
-   ```
-
-   You should see a new build with
-
-   ```text
-   BUILD    STATUS     IMAGE                                            REASON
-   1        SUCCESS    index.docker.io/your-name/app@sha256:6744b...    BUILDPACK
-   2        BUILDING                                                    CONFIG
-   ```
-
-   You can tail the logs for the Image Resource with the kp cli used in step #6.
-
-   ```bash
-   kp build logs tutorial-image -n default
-   ```
-
-   > Note: This second build should be notably faster because the buildpacks can leverage the cache from the previous build.
-
-9. Next steps.
-
-   The next time new buildpacks are added to the store, kpack will automatically
-   rebuild the builder. If the updated buildpacks were used by the tutorial
-   Image Resource, kpack will automatically create a new build to rebuild your
-   OCI image.
-
-### Getting started with kpack using `kubectl`
+### Installing kpack using `kubectl`
 
 1. Create a secret with push credentials for the Docker registry that you plan
    on publishing OCI images to with kpack.
@@ -456,8 +275,9 @@ installation.
    app source code.
 
    The Builder configuration will write to the registry with the secret
-   configured in step #1 and will reference the stack and store created in step #3 and step #4.
-   The builder order will determine the order in which buildpacks are used in the builder.
+   configured in step #1 and will reference the stack and store created in step
+   #3 and step #4. The builder order will determine the order in which
+   buildpacks are used in the builder.
 
     ```yaml
     apiVersion: kpack.io/v1alpha2
@@ -492,7 +312,202 @@ installation.
      kubectl apply -f builder.yaml
      ```
 
-6. Create a kpack Image Resource.
+
+## Usage Example 
+
+### Creating an image using kp CLI 
+
+1. Create a kpack Image Resource.
+
+   An Image Resource is the specification for an OCI image that kpack should build and manage.
+
+   We will create a sample Image Resource that builds with the builder created
+   in step #4.
+
+   The example included here utilizes the [Spring Pet Clinic sample app](https://github.com/spring-projects/spring-petclinic).
+   We encourage you to substitute it with your own application.
+
+   Create an Image Resource:
+
+    ```yaml
+    kp image save tutorial-image \
+      --tag <IMAGE-TAG> \
+      --git https://github.com/spring-projects/spring-petclinic \
+      --git-revision 82cb521d636b282340378d80a6307a08e3d4a4c4 \
+      --builder my-builder \
+      -n default
+    ```
+
+    * Make sure to replace `<IMAGE-TAG>` with the tag in the registry of the
+      secret you configured in step #5. Something like:
+      `your-name/app` or `gcr.io/your-project/app`
+    * If you are using your application source, replace `--git`
+      & `--git-revision`.
+   > Note: To use a private git repo follow the instructions in [secrets](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
+
+   You can now check the status of the Image Resource.
+
+   ```bash
+   kp image status tutorial-image -n default
+   ```
+
+   You should see that the Image Resource has a status Building as it is
+   currently building.
+
+    ```text
+    Status:         Building
+    Message:        --
+    LatestImage:    --
+
+    Source
+    Type:        GitUrl
+    Url:         https://github.com/spring-projects/spring-petclinic
+    Revision:    82cb521d636b282340378d80a6307a08e3d4a4c4
+
+    Builder Ref
+    Name:    base
+    Kind:    Builder
+
+    Last Successful Build
+    Id:              --
+    Build Reason:    --
+
+    Last Failed Build
+    Id:              --
+    Build Reason:    --
+    ```
+
+   You can tail the logs for Image Resource that is currently building using
+   the [kp cli](https://github.com/vmware-tanzu/kpack-cli/blob/main/docs/kp_build_logs.md)
+
+    ```bash
+    kp build logs tutorial-image -n default
+    ```
+
+   Once the Image Resource finishes building you can get the fully resolved
+   built OCI image with `kp`
+
+    ```bash
+    kp image status tutorial-image -n default
+    ```
+
+   The output should look something like this:
+
+    ```text
+    Status:         Ready
+    Message:        --
+    LatestImage:    index.docker.io/your-project/app@sha256:6744b...
+
+    Source
+    Type:        GitUrl
+    Url:         https://github.com/spring-projects/spring-petclinic
+    Revision:    82cb521d636b282340378d80a6307a08e3d4a4c4
+
+    Builder Ref
+    Name:    base
+    Kind:    Builder
+
+    Last Successful Build
+    Id:              1
+    Build Reason:    BUILDPACK
+    Git Revision:    82cb521d636b282340378d80a6307a08e3d4a4c4
+
+    BUILDPACK ID                           BUILDPACK VERSION    HOMEPAGE
+    paketo-buildpacks/ca-certificates      2.4.0                https://github.com/paketo-buildpacks/ca-certificates
+    paketo-buildpacks/bellsoft-liberica    8.4.0                https://github.com/paketo-buildpacks/bellsoft-liberica
+    paketo-buildpacks/gradle               5.5.0                https://github.com/paketo-buildpacks/gradle
+    paketo-buildpacks/executable-jar       5.2.0                https://github.com/paketo-buildpacks/executable-jar
+    paketo-buildpacks/apache-tomcat        6.1.0                https://github.com/paketo-buildpacks/apache-tomcat
+    paketo-buildpacks/dist-zip             4.2.0                https://github.com/paketo-buildpacks/dist-zip
+    paketo-buildpacks/spring-boot          4.5.0                https://github.com/paketo-buildpacks/spring-boot
+
+    Last Failed Build
+    Id:              --
+    Build Reason:    --
+    ```
+
+   The latest built OCI image is available to be used locally via `docker pull`
+   and in a Kubernetes deployment.
+
+2. Run the built application image locally.
+
+   Download the latest built OCI image available in step #6 and run it with
+   Docker.
+
+   ```bash
+   docker run -p 8080:8080 <latest-image-with-digest>
+   ```
+
+   You should see the java app start up:
+
+   ```text
+
+              |\      _,,,--,,_
+             /,`.-'`'   ._  \-;;,_
+    _______ __|,4-  ) )_   .;.(__`'-'__     ___ __    _ ___ _______
+    |       | '---''(_/._)-'(_\_)   |   |   |   |  |  | |   |       |
+    |    _  |    ___|_     _|       |   |   |   |   |_| |   |       | __ _ _
+    |   |_| |   |___  |   | |       |   |   |   |       |   |       | \ \ \ \
+    |    ___|    ___| |   | |      _|   |___|   |  _    |   |      _|  \ \ \ \
+    |   |   |   |___  |   | |     |_|       |   | | |   |   |     |_    ) ) ) )
+    |___|   |_______| |___| |_______|_______|___|_|  |__|___|_______|  / / / /
+    ==================================================================/_/_/_/
+
+    :: Built with Spring Boot :: 2.2.2.RELEASE
+   ```
+
+3. Rebuilding kpack Image Resources.
+
+   We recommend updating the kpack Image Resource with a CI/CD tool when new
+   commits are ready to be built.
+   > Note: You can also provide a branch or tag as the `spec.git.revision` and kpack will poll and rebuild on updates!
+
+   We can simulate an update from a CI/CD tool by updating
+   the `spec.git.revision` on the Image Resource configured in step #6.
+
+   If you are using your own application please push an updated commit and use
+   the new commit sha. If you are using Spring Pet Clinic you can update the
+   revision to: `4e1f87407d80cdb4a5a293de89d62034fdcbb847`.
+
+   Edit the Image Resource with:
+
+   ```bash
+   kp image save tutorial-image --git-revision 4e1f87407d80cdb4a5a293de89d62034fdcbb847 -n default
+   ```
+
+   You should see kpack schedule a new build by running:
+
+   ```bash
+   kp build list tutorial-image -n default
+   ```
+
+   You should see a new build with
+
+   ```text
+   BUILD    STATUS     IMAGE                                            REASON
+   1        SUCCESS    index.docker.io/your-name/app@sha256:6744b...    BUILDPACK
+   2        BUILDING                                                    CONFIG
+   ```
+
+   You can tail the logs for the Image Resource with the kp cli used in step #6.
+
+   ```bash
+   kp build logs tutorial-image -n default
+   ```
+
+   > Note: This second build should be notably faster because the buildpacks can leverage the cache from the previous build.
+
+4. Next steps.
+
+   The next time new buildpacks are added to the store, kpack will automatically
+   rebuild the builder. If the updated buildpacks were used by the tutorial
+   Image Resource, kpack will automatically create a new build to rebuild your
+   OCI image.
+
+
+### Creating an image using kubectl
+
+1. Create a kpack Image Resource.
 
    An Image Resource is the specification for an OCI image that kpack should
    build and manage.
@@ -576,7 +591,7 @@ installation.
    The latest OCI image is available to be used locally via `docker pull` and in
    a Kubernetes deployment.
 
-7. Run the built application image locally.
+2. Run the built application image locally.
 
    Download the latest OCI image available in step #6 and run it with Docker.
 
@@ -602,7 +617,7 @@ installation.
     :: Built with Spring Boot :: 2.2.2.RELEASE
    ```
 
-8. Rebuilding kpack Image Resources.
+3. Rebuilding kpack Image Resources.
 
    We recommend updating the kpack Image Resource with a CI/CD tool when new
    commits are ready to be built.
@@ -643,7 +658,7 @@ installation.
 
    > Note: This second build should be notably faster because the buildpacks can leverage the cache from the previous build.
 
-9. Next steps.
+4. Next steps.
 
    The next time new buildpacks are added to the store, kpack will
    automatically rebuild the builder. If the updated buildpacks were used by
