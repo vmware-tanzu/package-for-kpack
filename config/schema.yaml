@@ -5,6 +5,9 @@
 #@overlay/match-child-defaults missing_ok=True
 ---
 kp_default_repository: ""
+kp_default_repository_secret:
+  name: ""
+  namespace: ""
 kp_default_repository_username: ""
 kp_default_repository_password: ""
 
