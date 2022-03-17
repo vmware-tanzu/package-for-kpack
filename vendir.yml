@@ -1,23 +1,16 @@
-#! Copyright 2021 VMware, Inc.
-#! SPDX-License-Identifier: Apache-2.0
-
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.12.0
 directories:
-  - path: config/release
-    contents:
-      - path: .
-        githubRelease:
-          slug: pivotal/kpack
-          tag: v0.5.1
-          assetNames: ["release-*.yaml"]
-  - path: test
-    contents:
-    - path: .
-      git:
-        url: https://github.com/pivotal/kpack
-        refSelection:
-          semver:
-            constraints: "0.5.1"
-      newRootPath: test
+- path: config/release
+  contents:
+  - path: .
+    http:
+      url: https://storage.googleapis.com/beam-releases/kpack-release-yaml/release-0.5.2-rc.5.yaml
+- path: test
+  contents:
+  - path: .
+    git:
+      url: https://github.com/pivotal/kpack
+      ref: d9fe3e513eecd9a7bb8e483f6d582758ea25d991
+    newRootPath: test
