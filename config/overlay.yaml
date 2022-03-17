@@ -54,3 +54,15 @@ metadata:
   #@overlay/match missing_ok=True
   annotations:
     kapp.k14s.io/update-strategy: fallback-on-replace
+
+#! Eliminates carvel phantom diffs in AKS:
+#@ mutating_webhook = overlay.subset({"apiVersion": "admissionregistration.k8s.io/v1", "kind": "MutatingWebhookConfiguration"})
+#@ validating_webhook = overlay.subset({"apiVersion": "admissionregistration.k8s.io/v1", "kind": "ValidatingWebhookConfiguration"})
+
+#@overlay/match by=overlay.or_op(mutating_webhook,validating_webhook), expects="0+"
+---
+metadata:
+  #@overlay/match missing_ok=True
+  annotations:
+    #@overlay/match missing_ok=True
+    admissions.enforcer/disabled: "true"
