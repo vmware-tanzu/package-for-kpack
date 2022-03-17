@@ -36,10 +36,20 @@ spec:
 apiVersion: secretgen.carvel.dev/v1alpha1
 kind: SecretImport
 metadata:
-  name: kp-default-repository-secret
+  name: #@ data.values.kp_default_repository_secret.name
   namespace: kpack
 spec:
   fromNamespace: #@ data.values.kp_default_repository_secret.namespace
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kp-default-repository-serviceaccount
+  namespace:  kpack
+imagePullSecrets:
+  - name: #@ data.values.kp_default_repository_secret.name
+secrets:
+  - name: #@ data.values.kp_default_repository_secret.name
 #@ else:
 #@  data.values.kp_default_repository_username or assert.fail("missing kp_default_repository_username")
 #@  data.values.kp_default_repository_password or assert.fail("missing kp_default_repository_password")
@@ -58,18 +68,17 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: #@ kp_default_docker_configjson
-#@ end
-
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kp-default-repository-serviceaccount
-  namespace:  kpack
+  namespace: kpack
 imagePullSecrets:
   - name: kp-default-repository-secret
 secrets:
   - name: kp-default-repository-secret
+#@ end
 ---
 apiVersion: v1
 kind: ConfigMap
