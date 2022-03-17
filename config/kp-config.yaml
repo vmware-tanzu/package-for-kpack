@@ -52,7 +52,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name:  kp-default-repository-secret
-  namespace: build-service
+  namespace: kpack
   annotations:
     kapp.k14s.io/versioned: ""
 type: kubernetes.io/dockerconfigjson
