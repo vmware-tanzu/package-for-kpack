@@ -33,15 +33,22 @@ installation.
 | `no_proxy`                       | Optional          | A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy                                                                                                                                         |
 | `ca_cert_data`                   | Optional          | CA Certificate to be injected into the kpack controller trust store for communicating with self signed registries. (Note: This will not be injected into builds, you need to use the cert injection webhook with the `kpack.io/build` label value) |
 
-## Installation 
+## Installation
 
 ### Package Installation steps
 
-You can install the kpack package using the command below - 
+You can install the kpack package using the command below:
 
 `tanzu package install kpack --package-name kpack.community.tanzu.vmware.com --version 0.5.1 -f kpack-config-values.yaml`
 
-### Installing kpack using the `kp` cli
+## Configuration and Usage
+
+- [Configure kpack using kp](#configure-kpack-using-the-kp-cli)
+- [Creating an image using kp](#creating-an-image-using-kp-cli)
+- [Configure kpack using kubectl](#configure-kpack-using-kubectl)
+- [Creating an image using kubectl](#creating-an-image-using-kubectl)
+
+### Configure kpack using the `kp` cli
 
 > Note: This guide assumes that you have provided
 > the `kp_default_repository` values during install.
@@ -158,7 +165,7 @@ You can install the kpack package using the command below -
 
    > Note: Learn more about kpack secrets with the [kpack secret documentation](https://github.com/pivotal/kpack/blob/main/docs/secrets.md)
 
-### Installing kpack using `kubectl`
+### Configure kpack using `kubectl`
 
 1. Create a secret with push credentials for the Docker registry that you plan
    on publishing OCI images to with kpack.
@@ -275,9 +282,8 @@ You can install the kpack package using the command below -
    app source code.
 
    The Builder configuration will write to the registry with the secret
-   configured in step #1 and will reference the stack and store created in step
-   #3 and step #4. The builder order will determine the order in which
-   buildpacks are used in the builder.
+   configured in step #1 and will reference the stack and store created in step #3 and step #4. 
+   The builder order will determine the order in which buildpacks are used in the builder.
 
     ```yaml
     apiVersion: kpack.io/v1alpha2
@@ -312,10 +318,7 @@ You can install the kpack package using the command below -
      kubectl apply -f builder.yaml
      ```
 
-
-## Usage Example 
-
-### Creating an image using kp CLI 
+### Creating an image using kp CLI
 
 1. Create a kpack Image Resource.
 
@@ -503,7 +506,6 @@ You can install the kpack package using the command below -
    rebuild the builder. If the updated buildpacks were used by the tutorial
    Image Resource, kpack will automatically create a new build to rebuild your
    OCI image.
-
 
 ### Creating an image using kubectl
 
