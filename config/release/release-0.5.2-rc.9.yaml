@@ -270,7 +270,7 @@ metadata:
   name: build-init-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:8741fd312a6048b6cffe27e8c70f3547c5dce440816af44bc3afd4674b4da825
+  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:358f6c68cdff4df532f81e377f51eaf50bd2828dba6a2d3c2fdba0dbad353695
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -286,7 +286,7 @@ metadata:
   name: rebase-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:ae1396cf5e3be3c66d8be358ff19488b078317282a7204c52e449524ae32826a
+  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:dd57a8492671ecde2b5fa5fbe6fbce3813c8588faf19606c76699dff3d1b8ab8
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -302,7 +302,7 @@ metadata:
   name: completion-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion@sha256:70bf47b4077c2e6a5c69e2d18ae16a278a1e28d148dd02ab7ab1bef10cd1a9be
+  image: gcr.io/cf-build-service-public/kpack/completion@sha256:be91b1535d09ef73319470b9aab6ba17dc44a481b64b8150468f1fc65ab8d30c
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -326,14 +326,14 @@ spec:
     metadata:
       labels:
         app: kpack-controller
-        version: 0.5.2-rc.8
+        version: 0.5.2-rc.9
     spec:
       serviceAccountName: controller
       nodeSelector:
         kubernetes.io/os: linux
       containers:
       - name: controller
-        image: gcr.io/cf-build-service-public/kpack/controller@sha256:9d147c6dcc412b2b802a23c57d40f9c03390bb339b58c8a33eda7ef6571b7f75
+        image: gcr.io/cf-build-service-public/kpack/controller@sha256:79960bbd44100593ca3ee73b5f71f38949e17a081946509b45da4c7a3f2ca35e
         env:
         - name: CONFIG_LOGGING_NAME
           value: config-logging
@@ -694,14 +694,14 @@ spec:
       labels:
         app: kpack-webhook
         role: webhook
-        version: 0.5.2-rc.8
+        version: 0.5.2-rc.9
     spec:
       serviceAccountName: webhook
       nodeSelector:
         kubernetes.io/os: linux
       containers:
       - name: webhook
-        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:7b08dc3e7dc365ddea67624ae7d83ad209d741a2fa428c92ef8f61371ddc454a
+        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:4a03886a76e2d50455bef71951a0aa65fb5bca1521627f61d4428bba97d3e2da
         ports:
         - name: https-webhook
           containerPort: 8443
