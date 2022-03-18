@@ -33,7 +33,8 @@ metadata:
   name: #@ data.values.kp_default_repository_secret.name
   namespace: #@ data.values.kp_default_repository_secret.namespace
 spec:
-  toNamespace: kpack
+  toNamespaces:
+    - kpack
 ---
 apiVersion: secretgen.carvel.dev/v1alpha1
 kind: SecretImport
