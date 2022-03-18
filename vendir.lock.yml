@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #938 from pivotal/lifecycle-bug-fix...'
-      sha: d9fe3e513eecd9a7bb8e483f6d582758ea25d991
+      commitTitle: Bump lifecycle to 0.13.5...
+      sha: b66668e79d3888c25fa2796464f30827c508ebb2
       tags:
-      - v0.5.1-24-gd9fe3e5
+      - v0.5.1-25-gb66668e
     path: .
   path: test
 kind: LockConfig
