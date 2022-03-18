@@ -326,7 +326,7 @@ spec:
     metadata:
       labels:
         app: kpack-controller
-        version: 0.5.2-rc.7
+        version: 0.5.2-rc.8
     spec:
       serviceAccountName: controller
       nodeSelector:
@@ -694,7 +694,7 @@ spec:
       labels:
         app: kpack-webhook
         role: webhook
-        version: 0.5.2-rc.7
+        version: 0.5.2-rc.8
     spec:
       serviceAccountName: webhook
       nodeSelector:
