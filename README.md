@@ -43,10 +43,10 @@ You can install the kpack package using the command below:
 
 ## Configuration and Usage
 
-- [Configure kpack using kp](#configure-kpack-using-the-kp-cli)
-- [Creating an image using kp](#creating-an-image-using-kp-cli)
-- [Configure kpack using kubectl](#configure-kpack-using-kubectl)
-- [Creating an image using kubectl](#creating-an-image-using-kubectl)
+* [Configure kpack using kp](#configure-kpack-using-the-kp-cli)
+* [Creating an image using kp](#creating-an-image-using-kp-cli)
+* [Configure kpack using kubectl](#configure-kpack-using-kubectl)
+* [Creating an image using kubectl](#creating-an-image-using-kubectl)
 
 ### Configure kpack using the `kp` cli
 
@@ -282,7 +282,7 @@ You can install the kpack package using the command below:
    app source code.
 
    The Builder configuration will write to the registry with the secret
-   configured in step #1 and will reference the stack and store created in step #3 and step #4. 
+   configured in step #1 and will reference the stack and store created in step #3 and step #4.
    The builder order will determine the order in which buildpacks are used in the builder.
 
     ```yaml
