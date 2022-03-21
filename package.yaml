@@ -21,6 +21,16 @@ spec:
           description: docker repository
           examples:
             - registry.io/kpack
+        kp_default_repository_secret:
+          type: object
+          description: Secret reference for kp_default_repository credentials. Mutually exclusive with kp_default_repository_username/password. Requires Carvel secretgen-controller.
+          properties:
+            name:
+              description: Secret name for kp_default_repository credentials of type kubernetes.io/dockerconfigjson.
+              type: string
+            namespace:
+              description: Secret namespace for kp_default_repository credentials.
+              type: string
         kp_default_repository_username:
           type: string
           description: registry username
