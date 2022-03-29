@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: Bump lifecycle to 0.13.5...
-      sha: b66668e79d3888c25fa2796464f30827c508ebb2
+      commitTitle: 'Merge pull request #924 from stormqueen1990/upgrade-cosign-dependency...'
+      sha: 465e706536dc9f6aca6bd1d4a2a22dc417004119
       tags:
-      - v0.5.1-25-gb66668e
+      - v0.5.2-4-g465e706
     path: .
   path: test
 kind: LockConfig

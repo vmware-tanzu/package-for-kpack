@@ -270,7 +270,7 @@ metadata:
   name: build-init-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:358f6c68cdff4df532f81e377f51eaf50bd2828dba6a2d3c2fdba0dbad353695
+  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:90017561c2cf64928731201b5fb4ccf365419541b4cf9cff0415e741ef64a151
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -278,7 +278,7 @@ metadata:
   name: build-init-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:f989746a3eeefbd04c7e22569a9ac9bdfe4b254f98887c78417fe6f0ec99d352
+  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:dcc737c19356dcb3ebb2302d7ccec62de6432e120e8f35b66c058a30318a83e6
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -286,7 +286,7 @@ metadata:
   name: rebase-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:dd57a8492671ecde2b5fa5fbe6fbce3813c8588faf19606c76699dff3d1b8ab8
+  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:8f8065e29ebb5c46b72abc6031527ff4e00847f5f031696287cb061d20e4f3e3
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -302,7 +302,7 @@ metadata:
   name: completion-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion@sha256:be91b1535d09ef73319470b9aab6ba17dc44a481b64b8150468f1fc65ab8d30c
+  image: gcr.io/cf-build-service-public/kpack/completion@sha256:c429b6397eac6c2d796864f76fdf978f19f1ddc09e613f85801875326f8dafb6
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -310,7 +310,7 @@ metadata:
   name: completion-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:282c9ae1b181940f663baedfa3b6aa9501efc4c364fc0f76bdebcbfb6d3fae41
+  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:7146c29970a7038bbeaabf113e3ad02b5ef8a5ac37e7013a5139073b7ebe6464
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -326,14 +326,14 @@ spec:
     metadata:
       labels:
         app: kpack-controller
-        version: 0.5.2-rc.9
+        version: 0.5.3-rc.1
     spec:
       serviceAccountName: controller
       nodeSelector:
         kubernetes.io/os: linux
       containers:
       - name: controller
-        image: gcr.io/cf-build-service-public/kpack/controller@sha256:79960bbd44100593ca3ee73b5f71f38949e17a081946509b45da4c7a3f2ca35e
+        image: gcr.io/cf-build-service-public/kpack/controller@sha256:b04dd5edf2327a470c0354f7bda10c186eb89cd119c0ef3c9a6e5491e1c2d7a5
         env:
         - name: CONFIG_LOGGING_NAME
           value: config-logging
@@ -694,14 +694,14 @@ spec:
       labels:
         app: kpack-webhook
         role: webhook
-        version: 0.5.2-rc.9
+        version: 0.5.3-rc.1
     spec:
       serviceAccountName: webhook
       nodeSelector:
         kubernetes.io/os: linux
       containers:
       - name: webhook
-        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:4a03886a76e2d50455bef71951a0aa65fb5bca1521627f61d4428bba97d3e2da
+        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:cba119fb1219ae793b94744000838120466a8d2740b43c41adf37f26ab6b03aa
         ports:
         - name: https-webhook
           containerPort: 8443
