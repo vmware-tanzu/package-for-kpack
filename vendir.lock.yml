@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #924 from stormqueen1990/upgrade-cosign-dependency...'
-      sha: 465e706536dc9f6aca6bd1d4a2a22dc417004119
+      commitTitle: 'Merge pull request #908 from samj1912/preemption...'
+      sha: cecb3373638e6cc440bf7ae5d74c459987cfacad
       tags:
-      - v0.5.2-4-g465e706
+      - v0.5.2-10-gcecb337
     path: .
   path: test
 kind: LockConfig
