@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #908 from samj1912/preemption...'
-      sha: cecb3373638e6cc440bf7ae5d74c459987cfacad
+      commitTitle: 'Merge pull request #946 from pivotal/fix-ndr...'
+      sha: 1768c41ca72c5efafa1b39bb6d5ead4b2d098fdc
       tags:
-      - v0.5.2-10-gcecb337
+      - v0.5.2-12-g1768c41
     path: .
   path: test
 kind: LockConfig
