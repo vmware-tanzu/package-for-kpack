@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #946 from pivotal/fix-ndr...'
-      sha: 1768c41ca72c5efafa1b39bb6d5ead4b2d098fdc
+      commitTitle: 'Merge pull request #949 from jmcdice/main...'
+      sha: 67e1231e67cbd9abf9861227e3662bb7f4bdd87d
       tags:
-      - v0.5.2-12-g1768c41
+      - v0.5.2-14-g67e1231
     path: .
   path: test
 kind: LockConfig
