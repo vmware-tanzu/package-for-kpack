@@ -4,17 +4,40 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:overlay", "overlay")
 
+#@ def split_certs():
+#@   ca_certs_lines=data.values.ca_cert_data.splitlines()
+#@   ca_certs = []
+#@   i1=0
+#@   i2=0
+#@   for ca_cert_line in ca_certs_lines:
+#@     if ca_cert_line == "-----END CERTIFICATE-----" :
+#@       ca_certs.append("\n".join(ca_certs_lines[i1:i2+1]))
+#@       i1=i2+1
+#@     end
+#@     i2+=1
+#@   end
+#@   return ca_certs
+#@ end
+
+#@ ca_certs=split_certs()
+
 #@ if data.values.ca_cert_data != "":
+#@ i = 0
+#@ for ca_cert in ca_certs:
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ca-certificates-binding
+  name: #@ "ca-certificates-binding-" + str(i)
   namespace: kpack
 type: servicebinding.io/ca-certificates
 stringData:
   type: ca-certificates
-  certificates: #@ data.values.ca_cert_data
+  certificate: #@ ca_cert
+#@ i += 1
+#@ end
+
+
 
 #@overlay/match by=overlay.subset({"metadata":{"name":"kpack-controller"}, "kind": "Deployment"})
 ---
@@ -31,13 +54,21 @@ spec:
               value: "/bindings"
           #@overlay/match missing_ok=True
           volumeMounts:
+            #@ i = 0
+            #@ for ca_cert in ca_certs:
             #@overlay/append
-            - mountPath: /bindings/ca-certificates
-              name: ca-certificates
+            - mountPath: #@ "/bindings/ca-certificate-" + str(i)
+              name: #@ "ca-certificate-" + str(i)
+            #@ i += 1
+            #@ end
       #@overlay/match missing_ok=True
       volumes:
+        #@ i = 0
+        #@ for ca_cert in ca_certs:
         #@overlay/append
-        - name: ca-certificates
+        - name: #@ "ca-certificate-" + str(i)
           secret:
-            secretName: ca-certificates-binding
+            secretName: #@ "ca-certificates-binding-" + str(i)
+        #@ i += 1
+        #@ end
 #@ end
