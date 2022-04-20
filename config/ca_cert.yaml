@@ -3,18 +3,46 @@
 
 #@ load("@ytt:data", "data")
 #@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:assert", "assert")
+
+#@ def split_certs():
+#@   ca_certs_lines=data.values.ca_cert_data.splitlines()
+#@   ca_certs = []
+#@   i1=0
+#@   i2=0
+#@   found_cert = True
+#@   for ca_cert_line in ca_certs_lines:
+#@     found_cert = False
+#@     if ca_cert_line == "-----END CERTIFICATE-----" :
+#@       ca_certs.append("\n".join(ca_certs_lines[i1:i2+1]))
+#@       i1=i2+1
+#@       found_cert = True
+#@     end
+#@     i2+=1
+#@   end
+#@   found_cert or assert.fail("misconfigured ca_cert_data")
+#@   return ca_certs
+#@ end
 
 #@ if data.values.ca_cert_data != "":
+#@ ca_certs=split_certs()
+#@yaml/text-templated-strings
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: ca-certificates-binding
   namespace: kpack
+  annotations:
+    kapp.k14s.io/versioned: ""
 type: servicebinding.io/ca-certificates
 stringData:
   type: ca-certificates
-  certificates: #@ data.values.ca_cert_data
+  #@ i = 0
+  #@ for ca_cert in ca_certs:
+  certificate_(@= str(i) @): #@ ca_cert
+  #@ i += 1
+  #@ end
 
 #@overlay/match by=overlay.subset({"metadata":{"name":"kpack-controller"}, "kind": "Deployment"})
 ---
