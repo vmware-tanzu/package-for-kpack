@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #951 from pivotal/v0.5.3-fix-ndr...'
-      sha: 2c3432315ecfa15e3ee71b58b030593f533e11c4
+      commitTitle: 'Merge pull request #952 from pivotal/921-binding-to-a-provisionedservice-object-swallows-errors-and-proceeds-with-no-logging...'
+      sha: eb84c15f51b3d95fffe982679028471881d4f35c
       tags:
-      - v0.5.3
+      - v0.5.2-17-geb84c15
     path: .
   path: test
 kind: LockConfig
