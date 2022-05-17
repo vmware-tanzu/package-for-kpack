@@ -20,16 +20,16 @@
 #@  end
 
 #@ def exactly_one(values):
-#@     found = False;
-#@     for v in values:
-#@     	if v:
-#@     		if found:
-#@     			return False
-#@     		end
-#@     		found = True
-#@     	end
+#@   found = False;
+#@   for v in values:
+#@     if v:
+#@       if found:
+#@         return False
+#@       end
+#@       found = True
 #@     end
-#@     return found
+#@   end
+#@   return found
 #@ end
 #@ exclusive_values = [data.values.kp_default_repository_secret.name, data.values.kp_default_repository_username, data.values.kp_default_repository_aws_iam_role_arn]
 #@ if not exactly_one(exclusive_values):
@@ -102,6 +102,13 @@ spec:
         - name: credentials
           secret:
             secretName:  #@ secret_name
+#@ else:
+#@overlay/match by=overlay.subset({"kind": "ServiceAccount", "metadata":{"name":"controller", "namespace":"kpack"}})
+---
+metadata:
+  #@overlay/match missing_ok=True
+  annotations:
+    eks.amazonaws.com/role-arn: #@ data.values.kp_default_repository_aws_iam_role_arn
 #@ end
 
 ---
