@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #951 from pivotal/v0.5.3-fix-ndr...'
-      sha: 2c3432315ecfa15e3ee71b58b030593f533e11c4
+      commitTitle: 'Merge pull request #960 from pivotal/docs-unit-tests-and-libgit2...'
+      sha: 37764d9940b2f45b1c7acb6c2cd33cf4f489c03b
       tags:
-      - v0.5.3
+      - v0.5.2-21-g37764d9
     path: .
   path: test
 kind: LockConfig
