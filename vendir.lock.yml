@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #962 from pivotal/patch-crypto...'
-      sha: 3ba848e9c4a3af55d9eafd9d8b06638a356046c0
+      commitTitle: 'Merge pull request #963 from yaelharel/kp-tutorial...'
+      sha: 0d4dd5db7b771df2408198040afafd012c324b31
       tags:
-      - v0.5.3-2-g3ba848e
+      - v0.5.2-23-g0d4dd5d
     path: .
   path: test
 kind: LockConfig
