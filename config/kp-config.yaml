@@ -19,10 +19,24 @@
 #@    assert.fail("kp_default_repository must be a valid writeable repository and must include a '/'")
 #@  end
 
-#@ if data.values.kp_default_repository_secret.name and data.values.kp_default_repository_username:
-#@  assert.fail("must only use one of kp_default_repository_secret or kp_default_repository creds")
+#@ def exactly_one(values):
+#@   found = False;
+#@   for v in values:
+#@     if v:
+#@       if found:
+#@         return False
+#@       end
+#@       found = True
+#@     end
+#@   end
+#@   return found
+#@ end
+#@ exclusive_values = [data.values.kp_default_repository_secret.name, data.values.kp_default_repository_username, data.values.kp_default_repository_aws_iam_role_arn]
+#@ if not exactly_one(exclusive_values):
+#@  assert.fail("must only use one of kp_default_repository_secret, kp_default_repository_aws_iam_role_arn or kp_default_repository creds")
 #@ end
 
+#@ if data.values.kp_default_repository_aws_iam_role_arn == "":
 #@ secret_name = "kp-default-repository-secret"
 #@ if data.values.kp_default_repository_secret.name != "":
 #@ secret_name = data.values.kp_default_repository_secret.name
@@ -62,25 +76,6 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: #@ kp_default_docker_configjson
 #@ end
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: kp-default-repository-serviceaccount
-  namespace: kpack
-imagePullSecrets:
-  - name: #@ secret_name
-secrets:
-  - name: #@ secret_name
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name:  kp-config
-  namespace: kpack
-data:
-  default.repository: #@ data.values.kp_default_repository
-  default.repository.serviceaccount: kp-default-repository-serviceaccount
 
 #@overlay/match by=overlay.subset({"metadata":{"name":"kpack-controller"}, "kind": "Deployment"})
 ---
@@ -107,5 +102,34 @@ spec:
         - name: credentials
           secret:
             secretName:  #@ secret_name
+#@ else:
+#@overlay/match by=overlay.subset({"kind": "ServiceAccount", "metadata":{"name":"controller", "namespace":"kpack"}})
+---
+metadata:
+  #@overlay/match missing_ok=True
+  annotations:
+    eks.amazonaws.com/role-arn: #@ data.values.kp_default_repository_aws_iam_role_arn
+#@ end
 
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kp-default-repository-serviceaccount
+  namespace: kpack
+#@ if data.values.kp_default_repository_aws_iam_role_arn == "":
+imagePullSecrets:
+  - name: #@ secret_name
+secrets:
+  - name: #@ secret_name
+#@ end
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  kp-config
+  namespace: kpack
+data:
+  default.repository: #@ data.values.kp_default_repository
+  default.repository.serviceaccount: kp-default-repository-serviceaccount
 #@ end
