@@ -354,7 +354,7 @@ spec:
     metadata:
       labels:
         app: kpack-controller
-        version: 0.5.5-rc.2
+        version: 0.6.0-rc.1
     spec:
       priorityClassName: kpack-control-plane
       serviceAccountName: controller
@@ -750,7 +750,7 @@ spec:
       labels:
         app: kpack-webhook
         role: webhook
-        version: 0.5.5-rc.2
+        version: 0.6.0-rc.1
     spec:
       priorityClassName: kpack-control-plane
       serviceAccountName: webhook
