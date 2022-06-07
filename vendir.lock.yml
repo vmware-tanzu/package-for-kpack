@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: Multi keychain should use docker creds first...
-      sha: 60ec7f07c73b5cdcfb8acff17b6e586f784866fe
+      commitTitle: 'Merge pull request #965 from pivotal/ignore-hack-pkg...'
+      sha: 1ce635749b5dc8a332e33aa96d4fb0f047447d03
       tags:
-      - v0.5.2-33-g60ec7f0
+      - v0.5.2-36-g1ce6357
     path: .
   path: test
 kind: LockConfig
