@@ -31,3 +31,8 @@ rebaseRules:
     sources: [ existing ]
     resourceMatchers:
       - kindNamespaceNameMatcher: { kind: Secret, namespace: kpack, name: webhook-certs }
+  - path: [rules]
+    type: copy
+    sources: [existing]
+    resourceMatchers:
+      - kindNamespaceNameMatcher: { kind: ClusterRole, name: kpack-controller-servicebindings-cluster-role }
