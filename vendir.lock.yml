@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #969 from pivotal/go1.17...'
-      sha: c3eeb4a4fcd933fc71a8c789afd53c5a5fcb35ae
+      commitTitle: 'Merge pull request #968 from pivotal/istio...'
+      sha: 3b41459cd22063b5598e0177e661fa20e64914e8
       tags:
-      - v0.5.2-41-gc3eeb4a
+      - v0.5.2-43-g3b41459
     path: .
   path: test
 kind: LockConfig
