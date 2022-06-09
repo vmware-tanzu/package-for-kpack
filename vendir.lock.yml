@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #967 from pivotal/windows-metadat...'
-      sha: 115a3864b4d6547bf56685e141864aef9defc911
+      commitTitle: 'Merge pull request #969 from pivotal/go1.17...'
+      sha: c3eeb4a4fcd933fc71a8c789afd53c5a5fcb35ae
       tags:
-      - v0.5.2-39-g115a386
+      - v0.5.2-41-gc3eeb4a
     path: .
   path: test
 kind: LockConfig
