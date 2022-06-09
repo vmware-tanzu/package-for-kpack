@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #965 from pivotal/ignore-hack-pkg...'
-      sha: 1ce635749b5dc8a332e33aa96d4fb0f047447d03
+      commitTitle: 'Merge pull request #967 from pivotal/windows-metadat...'
+      sha: 115a3864b4d6547bf56685e141864aef9defc911
       tags:
-      - v0.5.2-36-g1ce6357
+      - v0.5.2-39-g115a386
     path: .
   path: test
 kind: LockConfig

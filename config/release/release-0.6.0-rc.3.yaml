@@ -298,7 +298,7 @@ metadata:
   name: build-init-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:7e33c8001ed7712b8e335cad521bd26edfffaa36261d3dc512739425cdae605b
+  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:c09139662f19e1db940e29902a7a8300ec3ca379632956b86aaa7ff82c52c95f
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -306,7 +306,7 @@ metadata:
   name: build-init-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:2783ae11b193fb4ceeb7871f5fab5a6ddd8a797e3ef6c14c3076ac92f306679e
+  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:170e87b4fd23057b141cc6cd065837b8fac185165a83d325d4b66cacb0993f1f
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -314,7 +314,7 @@ metadata:
   name: rebase-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:559ece5073ecaea07f4f36d04e62b5fae7677803321470bb34fa120a5969210c
+  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:c8fd82a760a463207e48d8dd5160ee8bea886c976adaa1ecc185f6292e8eb7ff
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -330,7 +330,7 @@ metadata:
   name: completion-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion@sha256:0826fc3629d719440c9fbfd9c6475eb4302605ca2427e6f1391ef20e077a5eb0
+  image: gcr.io/cf-build-service-public/kpack/completion@sha256:4b74232746aeed9f2b790cb322ba33813b334a114039b030f768dbf0e2d9aaa3
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -338,7 +338,7 @@ metadata:
   name: completion-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:f3f6f22afd7712b6c90976a216be934c9523f925c3f98a91a27d053e4fad5761
+  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:a8c551ba5821897624a9af10b9659fec13d808a63a76f02e66339f42602752ff
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -354,7 +354,7 @@ spec:
     metadata:
       labels:
         app: kpack-controller
-        version: 0.6.0-rc.2
+        version: 0.6.0-rc.3
     spec:
       priorityClassName: kpack-control-plane
       serviceAccountName: controller
@@ -362,7 +362,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: controller
-        image: gcr.io/cf-build-service-public/kpack/controller@sha256:5588ef137ed4917aea89dd8989ab327d837782ad08f22a48a71d7be745e604b7
+        image: gcr.io/cf-build-service-public/kpack/controller@sha256:3e2936b0662453d0b3d14dbab820a98a9f5937e7c4902e83f4241c23e84c4368
         env:
         - name: ENABLE_PRIORITY_CLASSES
           value: "false"
@@ -750,7 +750,7 @@ spec:
       labels:
         app: kpack-webhook
         role: webhook
-        version: 0.6.0-rc.2
+        version: 0.6.0-rc.3
     spec:
       priorityClassName: kpack-control-plane
       serviceAccountName: webhook
@@ -758,7 +758,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: webhook
-        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:6776e9340cb596705b8557b27752f428149f9fa1f7e26a7e718677814a168c41
+        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:7e3802fdc631c11a24dc4041616e2c7d0b9885e8a50d04053a95b7c6519cab7e
         ports:
         - name: https-webhook
           containerPort: 8443
