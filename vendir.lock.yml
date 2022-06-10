@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #970 from pivotal/silence-cred-helpers...'
-      sha: bc0e2001d9e33f988a27e37a725630d523cf34dc
+      commitTitle: 'Merge pull request #944 from jjbustamante/builder-info-in-prepare-log...'
+      sha: 0a30a5ac4c946d4c1a2d444ab41530de27f965ec
       tags:
-      - v0.5.2-45-gbc0e200
+      - v0.5.2-58-g0a30a5a
     path: .
   path: test
 kind: LockConfig
