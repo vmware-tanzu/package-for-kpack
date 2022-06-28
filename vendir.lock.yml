@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: Add pull requests to github project
-      sha: 1910c0de1cd6084fdf5851098f2e2cfd58756615
+      commitTitle: bump github actions unit test to go 1.17
+      sha: 33d72b29eed4afa7ce4830783e4b6ac24deddbbb
       tags:
-      - v0.6.0-4-g1910c0d
+      - v0.6.0-5-g33d72b2
     path: .
   path: test
 kind: LockConfig
