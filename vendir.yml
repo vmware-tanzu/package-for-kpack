@@ -6,11 +6,11 @@ directories:
   contents:
   - path: .
     http:
-      url: https://storage.googleapis.com/beam-releases/kpack-release-yaml/release-0.6.1-rc.2.yaml
+      url: https://storage.googleapis.com/beam-releases/kpack-release-yaml/release-0.6.1-rc.11.yaml
 - path: test
   contents:
   - path: .
     git:
       url: https://github.com/pivotal/kpack
-      ref: 33d72b29eed4afa7ce4830783e4b6ac24deddbbb
+      ref: 1d5282d726547ec32acfb153574353cc424b5a52
     newRootPath: test
