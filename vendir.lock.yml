@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #990 from pivotal/silence-ecr-helper...'
-      sha: 1d5282d726547ec32acfb153574353cc424b5a52
+      commitTitle: Fix deps
+      sha: a70f00b2ec39a024243bb4cec4b6596371f7357d
       tags:
-      - v0.6.0-7-g1d5282d
+      - v0.6.1-6-ga70f00b
     path: .
   path: test
 kind: LockConfig
