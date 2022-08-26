@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: Bump ggcr dep to 0.10.0
-      sha: 939dfc105e7ba7cdbbfad05f356429058eb471d9
+      commitTitle: 'Merge pull request #1021 from pivotal/done...'
+      sha: bbd0399b064778e31cfff0864207150443715d76
       tags:
-      - v0.6.1-3-g939dfc1
+      - v0.6.1-44-gbbd0399
     path: .
   path: test
 kind: LockConfig
