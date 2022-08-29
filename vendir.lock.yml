@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #1021 from pivotal/done...'
-      sha: bbd0399b064778e31cfff0864207150443715d76
+      commitTitle: Add default timeout to cosign signatures...
+      sha: 60dc82cf219048fc1a38e16a9e9e38afaaadab63
       tags:
-      - v0.6.1-44-gbbd0399
+      - v0.6.1-45-g60dc82c
     path: .
   path: test
 kind: LockConfig
