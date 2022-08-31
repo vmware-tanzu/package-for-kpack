@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: Add default timeout to cosign signatures...
-      sha: 60dc82cf219048fc1a38e16a9e9e38afaaadab63
+      commitTitle: 'Merge pull request #1013 from tcdowney/improve-error-for-invalid-service-account-secret-refs...'
+      sha: 1e3e8883d968b41d88a6180fa3bc444af2774f4d
       tags:
-      - v0.6.1-45-g60dc82c
+      - v0.6.1-47-g1e3e888
     path: .
   path: test
 kind: LockConfig
