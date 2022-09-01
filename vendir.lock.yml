@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #1013 from tcdowney/improve-error-for-invalid-service-account-secret-refs...'
-      sha: 1e3e8883d968b41d88a6180fa3bc444af2774f4d
+      commitTitle: 'Merge pull request #1025 from pivotal/configurable-platform-api...'
+      sha: 7cbd334523c528c41558e5c05213985ecfc2c4e2
       tags:
-      - v0.6.1-47-g1e3e888
+      - v0.6.1-49-g7cbd334
     path: .
   path: test
 kind: LockConfig
