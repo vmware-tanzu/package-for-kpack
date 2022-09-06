@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #1023 from pivotal/secret-to-volume-name...'
-      sha: 18fb2c8ea2c5775abb05f48e54d4b00ab2fb4bb8
+      commitTitle: 'Merge pull request #1030 from pivotal/restrict-pss...'
+      sha: 6eb2c674626cb5fadd355f22ccb5300a3a77c702
       tags:
-      - v0.6.1-63-g18fb2c8
+      - v0.6.1-68-g6eb2c67
     path: .
   path: test
 kind: LockConfig
