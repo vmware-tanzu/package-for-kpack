@@ -1,0 +1,14 @@
+apiVersion: kpack.io/v1alpha2
+kind: Build
+metadata:
+  name: sample
+spec:
+  tags:
+  - sample/image
+  serviceAccountName: serviceaccount
+  builder:
+    image: gcr.io/paketo-buildpacks/builder:base
+  source:
+    git:
+      url: https://github.com/buildpack/sample-java-app.git
+      revision: main

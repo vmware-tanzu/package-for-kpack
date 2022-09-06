@@ -11,5 +11,5 @@ directories:
       tags:
       - v0.6.1-68-g6eb2c67
     path: .
-  path: test
+  path: kpack
 kind: LockConfig

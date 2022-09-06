@@ -1,0 +1,97 @@
+#@ load("@ytt:data", "data")
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: defaults.webhook.kpack.io
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: kpack-webhook
+      namespace: kpack
+  failurePolicy: Fail
+  matchPolicy: Exact
+  sideEffects: None
+  name: defaults.webhook.kpack.io
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validation.webhook.kpack.io
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: kpack-webhook
+      namespace: kpack
+  failurePolicy: Fail
+  matchPolicy: Exact
+  sideEffects: None
+  name: validation.webhook.kpack.io
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: webhook-certs
+  namespace: kpack
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kpack-webhook
+  namespace: kpack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kpack-webhook
+  template:
+    metadata:
+      labels:
+        app: kpack-webhook
+        role: webhook
+        version: #@ data.values.version
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: "RuntimeDefault"
+      priorityClassName: kpack-control-plane
+      serviceAccountName: webhook
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+      - name: webhook
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          privileged: false
+          seccompProfile:
+            type: "RuntimeDefault"
+          capabilities:
+            drop:
+              - ALL
+        image: #@ data.values.webhook_image
+        ports:
+        - name: https-webhook
+          containerPort: 8443
+        env:
+        - name: CONFIG_LOGGING_NAME
+          value: config-logging
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: config-observability
+        - name: METRICS_DOMAIN
+          value: kpack.io
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: 10m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+            memory: 200Mi
