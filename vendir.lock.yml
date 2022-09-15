@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #1027 from jjbustamante/bugfix/issue-1017-support-correct-specification-of-project-descriptor...'
-      sha: ad6c587942c251f13bc55d5be2c9ea624bc5f2e5
+      commitTitle: 'Merge pull request #1033 from pivotal/lifecycle-0.14.2...'
+      sha: e9d424b1dd2dadf13eaef236164c546681719924
       tags:
-      - v0.6.1-70-gad6c587
+      - v0.7.0-2-ge9d424b1
     path: .
   path: kpack
 kind: LockConfig
