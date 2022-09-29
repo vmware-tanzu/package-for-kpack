@@ -80,6 +80,7 @@ func (im *Image) Build(sourceResolver *SourceResolver, builder BuilderResource, 
 			SchedulerName:         im.SchedulerName(),
 			PriorityClassName:     priorityClass,
 			ActiveDeadlineSeconds: im.BuildTimeout(),
+			CreationTime:          im.Spec.Build.CreationTime,
 		},
 	}
 }
@@ -205,6 +206,10 @@ func (im *Image) CacheName() string {
 }
 
 func (im *Image) BuildCache() *corev1.PersistentVolumeClaim {
+	var storageClassName *string
+	if im.Spec.Cache.Volume.StorageClassName != "" {
+		storageClassName = &im.Spec.Cache.Volume.StorageClassName
+	}
 	return &corev1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      im.CacheName(),
@@ -221,6 +226,7 @@ func (im *Image) BuildCache() *corev1.PersistentVolumeClaim {
 					corev1.ResourceStorage: *im.Spec.Cache.Volume.Size,
 				},
 			},
+			StorageClassName: storageClassName,
 		},
 	}
 }

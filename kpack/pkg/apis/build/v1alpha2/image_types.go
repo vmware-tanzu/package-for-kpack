@@ -78,6 +78,7 @@ type ImageBuild struct {
 	RuntimeClassName *string             `json:"runtimeClassName,omitempty"`
 	SchedulerName    string              `json:"schedulerName,omitempty"`
 	BuildTimeout     *int64              `json:"buildTimeout,omitempty"`
+	CreationTime     string              `json:"creationTime,omitempty"`
 }
 
 // +k8s:openapi-gen=true
@@ -88,7 +89,8 @@ type ImageCacheConfig struct {
 
 // +k8s:openapi-gen=true
 type ImagePersistentVolumeCache struct {
-	Size *resource.Quantity `json:"size,omitempty"`
+	Size             *resource.Quantity `json:"size,omitempty"`
+	StorageClassName string             `json:"storageClassName,omitempty"`
 }
 
 // +k8s:openapi-gen=true

@@ -6,10 +6,10 @@ directories:
   path: config/release
 - contents:
   - git:
-      commitTitle: 'Merge pull request #1033 from pivotal/lifecycle-0.14.2...'
-      sha: e9d424b1dd2dadf13eaef236164c546681719924
+      commitTitle: Update openapi codegen with new fields
+      sha: 35fdcce5921c53e579051003c1c13b53c5645b31
       tags:
-      - v0.7.0-2-ge9d424b1
+      - v0.7.1-7-g35fdcce5
     path: .
   path: kpack
 kind: LockConfig

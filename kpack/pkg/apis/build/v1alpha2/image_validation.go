@@ -3,6 +3,7 @@ package v1alpha2
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/google/go-containerregistry/pkg/name"
@@ -127,8 +128,8 @@ func (is *ImageSpec) validateSameRegistry() *apis.FieldError {
 }
 
 func (is *ImageSpec) validateVolumeCache(ctx context.Context) *apis.FieldError {
-	if is.Cache != nil && is.Cache.Volume != nil && ctx.Value(HasDefaultStorageClass) == nil {
-		return apis.ErrGeneric("spec.cache.volume.size cannot be set with no default StorageClass")
+	if is.Cache != nil && is.Cache.Volume != nil && is.Cache.Volume.StorageClassName == "" && ctx.Value(HasDefaultStorageClass) == nil {
+		return apis.ErrGeneric("spec.cache.volume.size cannot be set without spec.cache.volume.storageClassName or a default StorageClass")
 	}
 
 	if apis.IsInUpdate(ctx) {
@@ -147,6 +148,8 @@ func (is *ImageSpec) validateVolumeCache(ctx context.Context) *apis.FieldError {
 					Details: fmt.Sprintf("current: %v, requested: %v", original.Spec.Cache.Volume.Size, is.Cache.Volume.Size),
 				}
 			}
+
+			return validate.ImmutableField(original.Spec.Cache.Volume.StorageClassName, is.Cache.Volume.StorageClassName, "cache.volume.storageClassName")
 		}
 	}
 
@@ -161,6 +164,14 @@ func (ib *ImageBuild) Validate(ctx context.Context) *apis.FieldError {
 	if len(ib.NodeSelector) != 0 {
 		if _, ok := ib.NodeSelector[k8sOSLabel]; ok {
 			return apis.ErrInvalidKeyName(k8sOSLabel, "nodeSelector", "os is determined automatically")
+		}
+	}
+
+	if ib.CreationTime != "" && ib.CreationTime != "now" {
+		// check that the timestamp in CreationTime is in valid format
+		_, err := strconv.ParseInt(ib.CreationTime, 10, 64)
+		if err != nil {
+			return apis.ErrInvalidValue(ib.CreationTime, "creationTime")
 		}
 	}
 
@@ -194,7 +205,7 @@ func (is *ImageSpec) validateBuildHistoryLimit() *apis.FieldError {
 	return nil
 }
 
-func (c *ImageCacheConfig) Validate(context context.Context) *apis.FieldError {
+func (c *ImageCacheConfig) Validate(ctx context.Context) *apis.FieldError {
 	if c != nil && c.Volume != nil && c.Registry != nil {
 		return apis.ErrGeneric("only one type of cache can be specified", "volume", "registry")
 	}

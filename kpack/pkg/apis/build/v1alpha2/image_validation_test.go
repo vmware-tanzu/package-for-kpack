@@ -44,7 +44,8 @@ func testImageValidation(t *testing.T, when spec.G, it spec.S) {
 			},
 			Cache: &ImageCacheConfig{
 				Volume: &ImagePersistentVolumeCache{
-					Size: &cacheSize,
+					Size:             &cacheSize,
+					StorageClassName: "sc-name",
 				},
 			},
 			FailedBuildHistoryLimit:  &limit,
@@ -260,6 +261,25 @@ func testImageValidation(t *testing.T, when spec.G, it spec.S) {
 			assertValidationError(image, ctx, apis.ErrMissingField("spec.build.services[0].name"))
 		})
 
+		when("validates the creation time", func() {
+			it("pass if it sets to 'now'", func() {
+				image.Spec.Build.CreationTime = "now"
+				err := image.Validate(ctx)
+				assert.Nil(t, err)
+			})
+
+			it ("pass if it sets to a valid timestamp", func() {
+				image.Spec.Build.CreationTime = "1566172801" //Mon Aug 19 2019 00:00:01 GMT+0000
+				err := image.Validate(ctx)
+				assert.Nil(t, err)
+			})
+
+			it("fails if the creation time is not 'now' or a valid timestamp", func() {
+				image.Spec.Build.CreationTime = "invalidTimestamp"
+				assertValidationError(image, ctx, apis.ErrInvalidValue("invalidTimestamp", "creationTime").ViaField("spec", "build"))
+			})
+		})
+
 		it("image name is too long", func() {
 			image.ObjectMeta.Name = "this-image-name-that-is-too-long-some-sha-that-is-long-82cb521d636b282340378d80a6307a08e3d4a4c4"
 			assertValidationError(image, ctx, errors.New("invalid image name: this-image-name-that-is-too-long-some-sha-that-is-long-82cb521d636b282340378d80a6307a08e3d4a4c4, name must be a a valid label: metadata.name\nmust be no more than 63 characters"))
@@ -285,10 +305,11 @@ func testImageValidation(t *testing.T, when spec.G, it spec.S) {
 
 		})
 
-		it("validates cache size is not set when there is no default StorageClass", func() {
+		it("validates cache size is not set when there is no default StorageClass and no storageClassName", func() {
 			ctx = context.TODO()
+			image.Spec.Cache.Volume.StorageClassName = ""
 
-			assertValidationError(image, ctx, apis.ErrGeneric("spec.cache.volume.size cannot be set with no default StorageClass"))
+			assertValidationError(image, ctx, apis.ErrGeneric("spec.cache.volume.size cannot be set without spec.cache.volume.storageClassName or a default StorageClass"))
 		})
 
 		it("combining errors", func() {
@@ -313,6 +334,14 @@ func testImageValidation(t *testing.T, when spec.G, it spec.S) {
 			image.Spec.Cache.Volume.Size = &cacheSize
 			err := image.Validate(apis.WithinUpdate(ctx, original))
 			assert.EqualError(t, err, "Field cannot be decreased: spec.cache.volume.size\ncurrent: 5G, requested: 4G")
+		})
+
+		it("image.cache.volume.storageClassName has not changed", func() {
+			original := image.DeepCopy()
+
+			image.Spec.Cache.Volume.StorageClassName = "sc-different"
+			err := image.Validate(apis.WithinUpdate(ctx, original))
+			assert.EqualError(t, err, "Immutable field changed: spec.cache.volume.storageClassName\ngot: sc-different, want: sc-name")
 		})
 
 		when("validating the cosign config", func() {
