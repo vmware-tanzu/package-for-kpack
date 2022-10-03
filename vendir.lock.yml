@@ -4,12 +4,4 @@ directories:
   - http: {}
     path: .
   path: config/release
-- contents:
-  - git:
-      commitTitle: Update openapi codegen with new fields
-      sha: 35fdcce5921c53e579051003c1c13b53c5645b31
-      tags:
-      - v0.7.1-7-g35fdcce5
-    path: .
-  path: kpack
 kind: LockConfig

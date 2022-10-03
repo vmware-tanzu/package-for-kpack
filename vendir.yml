@@ -7,14 +7,3 @@ directories:
   - path: .
     http:
       url: https://storage.googleapis.com/beam-releases/kpack-release-yaml/release-0.7.2-rc.4.yaml
-- path: kpack
-  contents:
-  - path: .
-    git:
-      url: https://github.com/pivotal/kpack
-      ref: 35fdcce5921c53e579051003c1c13b53c5645b31
-    excludePaths:
-    - .git/**/*
-    - .gitignore
-    - .github/**/*
-    - .gitattributes

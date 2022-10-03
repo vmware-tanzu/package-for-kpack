@@ -10,14 +10,3 @@ directories:
     - path: .
       http:
         url: #@ "https://storage.googleapis.com/beam-releases/kpack-release-yaml/release-{}.yaml".format(data.values.version)
-  - path: kpack
-    contents:
-    - path: .
-      git:
-        url: https://github.com/pivotal/kpack
-        ref: #@ data.values.commit_sha
-      excludePaths:
-        - .git/**/*
-        - .gitignore
-        - .github/**/*
-        - .gitattributes

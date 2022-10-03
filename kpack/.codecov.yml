@@ -1,3 +1,0 @@
-ignore:
-  - "**/zz_*_generated.go" # Ignore generated files.
-  - "**/zz_generated.deepcopy.go" # Ignore generated files.
