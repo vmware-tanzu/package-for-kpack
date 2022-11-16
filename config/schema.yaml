@@ -17,3 +17,5 @@ https_proxy: ""
 no_proxy: ""
 
 ca_cert_data: ""
+
+injected_sidecar_support: false
