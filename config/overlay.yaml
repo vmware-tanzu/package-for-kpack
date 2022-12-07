@@ -27,4 +27,4 @@ metadata:
   #@overlay/match missing_ok=True
   annotations:
     #@overlay/match missing_ok=True
-    admissions.enforcer/disabled: "true"
+    admissions.enforcer/disabled: "true" #! wokeignore:rule=disable
