@@ -301,7 +301,7 @@ metadata:
   name: build-init-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:4a4d147f5eca761da9f20fe7d447aba80478c83c9a16542ab2fd116e6aa718fc
+  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:97eec62c6dca1432453335ac4e582e82231d68bcfc15fbbc5af12e436b320f00
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -309,7 +309,7 @@ metadata:
   name: build-init-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:4ccc122d6f45eb719f8fcd04a51bd46f2b63c742e6522f0d331f75e3fbb72b6a
+  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:355f39f8929f7d62f46d5e3a3af646dcfa18d59a0f9ba1521c0e000de112b604
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -317,7 +317,7 @@ metadata:
   name: build-waiter-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-waiter@sha256:2a8a005f6ae99efc8b4e35c5fa6f5f4f327674603b2ea0ed3911a8fda6cba6a8
+  image: gcr.io/cf-build-service-public/kpack/build-waiter@sha256:0bea7811e74b63b1630fc7ebd764f312e9d9a7b94994e6babc66bce86edb60b0
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -325,7 +325,7 @@ metadata:
   name: rebase-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:111556fba973459bf038e4c705b82b2b34c6569973c55232bc81530e8ab47f0b
+  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:61960593795c3c9eed99900ff59cf5c0ef0ec559dea63ba0a27e9ca70d28acbd
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -333,7 +333,7 @@ metadata:
   name: lifecycle-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/lifecycle@sha256:284a738d402060ffd196bf65c4ad1177dbf24278207bee09037eeab613653b2f
+  image: gcr.io/cf-build-service-public/kpack/lifecycle@sha256:5e9f16f13ba5979ef0d553edf337b526c6f7f56550ef2872e97e278ce26a2b91
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -341,7 +341,7 @@ metadata:
   name: completion-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion@sha256:fa79c7cdd5fabf3f04d96a830e1ecc9747fb645c223608017130ad26118ab75a
+  image: gcr.io/cf-build-service-public/kpack/completion@sha256:bb2274f53e84ce6a97470e66e600ddb0698d51c664e93295b4587354088841c8
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -349,7 +349,7 @@ metadata:
   name: completion-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:d5ebba70e3b876452a3475e7ade9b420ee931f10a6fad14766e86af2452b5de9
+  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:a554f262f21e57dd0cb49bbd971670d148d11a7457fe51a03686aacb5d9fd17c
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -365,7 +365,7 @@ spec:
     metadata:
       labels:
         app: kpack-controller
-        version: 0.9.3-rc.1
+        version: 0.10.1-rc.1
     spec:
       securityContext:
         runAsNonRoot: true
@@ -386,7 +386,7 @@ spec:
           capabilities:
             drop:
             - ALL
-        image: gcr.io/cf-build-service-public/kpack/controller@sha256:7896ad9ee1f33e2554f639bd890b4b017bb0c155a9bb6ba5dc74d9529f9d0226
+        image: gcr.io/cf-build-service-public/kpack/controller@sha256:1886bcbe5c8caa9b1aed10d0eeb76fa3c1cb073fe39dd47db0e7073d0d2bd22b
         env:
         - name: ENABLE_PRIORITY_CLASSES
           value: "false"
@@ -435,10 +435,9 @@ spec:
         resources:
           requests:
             cpu: 20m
-            memory: 100Mi
+            memory: 1Gi
           limits:
-            cpu: 100m
-            memory: 500Mi
+            memory: 1Gi
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -787,7 +786,7 @@ spec:
       labels:
         app: kpack-webhook
         role: webhook
-        version: 0.9.3-rc.1
+        version: 0.10.1-rc.1
     spec:
       securityContext:
         runAsNonRoot: true
@@ -808,7 +807,7 @@ spec:
           capabilities:
             drop:
             - ALL
-        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:dcd8274ae15c07b64f1ca8230e66686d860438fa6c82d4aec4030f6436d06e6c
+        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:6d3526702dac3ac6a42e6590adf6f2389f1e04db09474373faebcf936bde307b
         ports:
         - name: https-webhook
           containerPort: 8443
