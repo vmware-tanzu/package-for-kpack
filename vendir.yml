@@ -6,4 +6,4 @@ directories:
   contents:
   - path: .
     http:
-      url: https://storage.googleapis.com/beam-releases/kpack-release-yaml/release-0.7.5-rc.2.yaml
+      url: https://storage.googleapis.com/beam-releases/kpack-release-yaml/release-0.9.3-rc.1.yaml
