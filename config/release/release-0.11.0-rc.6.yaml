@@ -135,6 +135,38 @@ spec:
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
+  name: buildpacks.kpack.io
+spec:
+  group: kpack.io
+  versions:
+  - name: v1alpha2
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: Ready
+      type: string
+      jsonPath: .status.conditions[?(@.type=="Ready")].status
+  names:
+    kind: Buildpack
+    listKind: BuildpackList
+    singular: buildpack
+    plural: buildpacks
+    shortNames:
+    - bp
+    - bps
+    categories:
+    - kpack
+  scope: Namespaced
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
   name: clusterbuilders.kpack.io
 spec:
   group: kpack.io
@@ -179,6 +211,38 @@ spec:
     shortNames:
     - clstbldr
     - clstbldrs
+    categories:
+    - kpack
+  scope: Cluster
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: clusterbuildpacks.kpack.io
+spec:
+  group: kpack.io
+  versions:
+  - name: v1alpha2
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: Ready
+      type: string
+      jsonPath: .status.conditions[?(@.type=="Ready")].status
+  names:
+    kind: ClusterBuildpack
+    listKind: ClusterBuildpackList
+    singular: clusterbuildpack
+    plural: clusterbuildpacks
+    shortNames:
+    - clstbp
+    - clstbps
     categories:
     - kpack
   scope: Cluster
@@ -301,7 +365,7 @@ metadata:
   name: build-init-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:bae94a3653f631e95cdb163eccfae28144074e8e854703c7ea8a32f8a30ded07
+  image: gcr.io/cf-build-service-public/kpack/build-init@sha256:10c1313dcb1d208ff2b668e7e818eb396be99127f34f52be33fb80c4ddcbddf5
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -309,7 +373,7 @@ metadata:
   name: build-init-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:b53ba665793a87b25663dccf7c9ddc9e3c3a67ed3b7a796f64de508b64eca032
+  image: gcr.io/cf-build-service-public/kpack/build-init-windows@sha256:949eb9d1ef47cc89890735950c16ea7ec63631eb26800663a083c56e09974b06
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -317,7 +381,7 @@ metadata:
   name: build-waiter-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/build-waiter@sha256:0acde87ff2f299c7741490b9119fc856e656994b3e0235d0b23ca1d1d1bf6080
+  image: gcr.io/cf-build-service-public/kpack/build-waiter@sha256:dbfd370eaba78c6240eb6059883103eda66f4b6f2dfe00f0a397c9d04bb10f23
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -325,7 +389,7 @@ metadata:
   name: rebase-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:12de42095b3d6a7dac036e376d22562d9493888abf674267cc9d8fe219a220de
+  image: gcr.io/cf-build-service-public/kpack/rebase@sha256:61368064773411652fd5e88dbb9f1ee4e4af48c4401042833ee096b4e362330a
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -333,7 +397,7 @@ metadata:
   name: lifecycle-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/lifecycle@sha256:284a738d402060ffd196bf65c4ad1177dbf24278207bee09037eeab613653b2f
+  image: gcr.io/cf-build-service-public/kpack/lifecycle@sha256:5e9f16f13ba5979ef0d553edf337b526c6f7f56550ef2872e97e278ce26a2b91
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -341,7 +405,7 @@ metadata:
   name: completion-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion@sha256:0ee3a5b2be313d49311d5aa2cfd89b2b7ff4bb36ac972f2e6d0cb37d3fee58a3
+  image: gcr.io/cf-build-service-public/kpack/completion@sha256:e4722d81d5d4e359e486e30c0dc01e9e87f9eafbb9865df4dc185ef3ffe2fc57
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -349,7 +413,7 @@ metadata:
   name: completion-windows-image
   namespace: kpack
 data:
-  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:6d578c86aa21c01d84a9172664cf7debab63fefbd342834f7022b232880fa327
+  image: gcr.io/cf-build-service-public/kpack/completion-windows@sha256:f1e1c65cabfdd316dee8193a19594dde52ef5d6879397cc587a93fd6ce3044f7
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -365,7 +429,7 @@ spec:
     metadata:
       labels:
         app: kpack-controller
-        version: 0.9.4-rc.1
+        version: 0.11.0-rc.6
     spec:
       securityContext:
         runAsNonRoot: true
@@ -386,7 +450,7 @@ spec:
           capabilities:
             drop:
             - ALL
-        image: gcr.io/cf-build-service-public/kpack/controller@sha256:0f223e691a2f3d4eb8baf5544dd3fa03cbd1196438952dd31f5ee87609920aca
+        image: gcr.io/cf-build-service-public/kpack/controller@sha256:7a8a31ee2c4e92737b1ba879f2b699952221d8d9bf680d011373957e7d830f8c
         env:
         - name: ENABLE_PRIORITY_CLASSES
           value: "false"
@@ -435,10 +499,9 @@ spec:
         resources:
           requests:
             cpu: 20m
-            memory: 100Mi
+            memory: 1Gi
           limits:
-            cpu: 100m
-            memory: 500Mi
+            memory: 1Gi
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -462,8 +525,12 @@ rules:
   - images/finalizers
   - builders
   - builders/status
+  - buildpacks
+  - buildpacks/status
   - clusterbuilders
   - clusterbuilders/status
+  - clusterbuildpacks
+  - clusterbuildpacks/status
   - clusterstores
   - clusterstores/status
   - clusterstacks
@@ -787,7 +854,7 @@ spec:
       labels:
         app: kpack-webhook
         role: webhook
-        version: 0.9.4-rc.1
+        version: 0.11.0-rc.6
     spec:
       securityContext:
         runAsNonRoot: true
@@ -808,7 +875,7 @@ spec:
           capabilities:
             drop:
             - ALL
-        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:7c853f3d7e4c4633480aad074a741a2e035a819e1879d9d4306517ce5fc3fe2c
+        image: gcr.io/cf-build-service-public/kpack/webhook@sha256:18b12f7cff2432823ea9cec8bab0465e7f7f51e5bc58be9b130dc1eaa308611a
         ports:
         - name: https-webhook
           containerPort: 8443
